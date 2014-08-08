@@ -4,8 +4,26 @@
 Os requisitos funcionais levantados para o \it{software} são:
 
 \begin{enumerate}[label=RF \arabic* -- , ref=\arabic*]
-	\item A
-	\item B
+	\item O sistema deverá ligar a luz de um botão quando este for pressionado.
+  \item O sistema deverá desligar a luz de um botão quando o elevador parar no andar correspondente ao botão.
+  \item O sistema deverá abrir as portas quando o elevador parar em um andar.
+  \item O sistema deverá impedir que as portas sejam abertas quando o elevador não estiver posicionado em um andar.
+  \item O sistema deverá impedir que as portas sejam abertas quando o elevador estiver em movimento.
+  \item O sistema deverá impedir que o elevador se movimente quando as portas estiverem abertas.
+  \item O sistema deverá atender a requisições de mudança de andar, feitas através dos botões.
+  \begin{enumerate}[label*=\arabic*]
+    \item O sistema deverá enfileirar as requisições de mudança de andar.
+    \item O sistema deverá manter apenas uma requisição de cada andar na fila.
+    \item O sistema deverá dar prioridade à requisições feitas com os botões internos.
+    \item O sistema deverá dar prioridade às requisições dos andares mais altos feitas com botões externos de descida.
+    \item O sistema deverá dar prioridade às requisições dos andares mais baixos feitas com botões externos de subida.
+    \item O sistema deverá parar o elevador quando ele estiver passando por um andar que o botão interno correspondente tenha sido pressionado.
+    \item O sistema deverá parar o elevador quando ele estiver passando por um andar que o botão externo tenha sido pressionado, se estiver indo na mesma direção que a requisição foi feita.
+    \end{enumerate}
+  \item O sistema deverá esperar no mínimo 5 segundos após as portas terem sido fechadas antes de fechar elas novamente.
+  \item O sistema deverá esperar meio segundo após fechar as portas antes de deslocar o elevador.
+  \item O sistema deverá esperar meio segundo após o elevador parar antes de abrir as portas.
+  \item O sistema deverá esperar no mínimo 2 segundos para fechar a porta após um botão interno ser pressionado.
 \end{enumerate}
 
 Os requisitos não-funcionais levantados para o \it{software} são:
