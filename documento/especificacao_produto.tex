@@ -3,7 +3,7 @@
 
 Os requisitos funcionais levantados para o \it{software} são:
 
-\begin{enumerate}[label=RF \arabic* -- , ref=\arabic*]
+\begin{enumerate}[label=RF \arabic*. , ref=\arabic*]
 	\item O sistema deverá ligar a luz de um botão quando este for pressionado.
   \item O sistema deverá desligar a luz de um botão quando o elevador parar no andar correspondente ao botão.
   \item O sistema deverá abrir as portas quando o elevador parar em um andar.
@@ -11,7 +11,7 @@ Os requisitos funcionais levantados para o \it{software} são:
   \item O sistema deverá impedir que as portas sejam abertas quando o elevador estiver em movimento.
   \item O sistema deverá impedir que o elevador se movimente quando as portas estiverem abertas.
   \item O sistema deverá atender a requisições de mudança de andar, feitas através dos botões.
-  \begin{enumerate}[label*=\arabic*]
+  \begin{enumerate}[label*=\arabic*.]
     \item O sistema deverá enfileirar as requisições de mudança de andar.
     \item O sistema deverá manter apenas uma requisição de cada andar na fila.
     \item O sistema deverá dar prioridade à requisições feitas com os botões internos.
@@ -28,7 +28,8 @@ Os requisitos funcionais levantados para o \it{software} são:
 
 Os requisitos não-funcionais levantados para o \it{software} são:
 
-\begin{enumerate}[label=RNF \arabic* -- , ref=\arabic*]
-	\item A
-	\item B
+\begin{enumerate}[label=RNF \arabic*. , ref=\arabic*]
+	\item O sistema deverá parar o elevador após chegar no andar em no máximo 40 milissegundos.
+  \item O sistema deverá responder a uma requisição em no máximo 40 milissegundos.
+  \item O sistema deverá acender a luz correspondente em no máximo 10 milissegundos após um botão ter sido pressionado.
 \end{enumerate}
