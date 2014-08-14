@@ -1,12 +1,20 @@
 
 \section{Introdução}
+Elevadores são dispositivos que estão presentes na maioria dos edifícios, sendo em muitos casos essenciais para o acesso das pessoas aos andares mais elevados. Um elevador, de forma genérica, possui sensores (botões de cada andar, sensor de posição) e atuadores (motor de subida/descida, motor das portas e luzes dos botões de andar).
 
-Este projeto tem o objetivo de desenvolver um controlador de elevador com o Kit LPC1768, 
+Este projeto tem o objetivo de desenvolver um controlador de elevador com o Kit LPC1768, sendo que ele será responsável por gerenciar todos os aspectos da lógica de funcionamento do elevador.
 
 \section{Objeto}
-O produto tem o propósito de ser um controlador de elevador, recebendo requisições de usuários nos botões de cada andar e nos botões internos, e efetuando o controle dos atuadores (luzes de botões, motor de subida/descida e portas) conforme essas requisições. Deve-se atender às demandas dos usuários, de forma eficiente.
+O produto tem o propósito de ser um controlador de elevador, recebendo requisições de usuários nos botões de cada andar e nos botões internos, e efetuando o controle dos atuadores (luzes de botões, motor de subida/descida e portas) conforme essas requisições. O elevador deve atender às demandas dos usuários, de forma eficiente.
 
 \section{Domínio do problema}
+Para o gerenciamento de um elevador, há aspectos importantes que devem ser observados com relação ao seu funcionamento.  O elevador possui limitações quando à sua aceleração máxima. Portanto, há um intervalo mínimo de tempo para ele conseguir parar quando recebe uma requisição de um usuário. Essas limitações estão expostas mas adinate nos requisitos não-funcionais.
+
+Com relação à segurança, as portas somente devem ser abertas quando o elevador está parado em algum andar (posicionado dentro de uma faixa de segurança). Também, o elevador só deve mover-se com as portas fechadas.
+
+
+% \subsection{Segurança}
+% A segurança é um fator primordial, que, dentro do contexto deste projeto, envolve o gerenciamento correto dos motores do elevador (subida/descida e portas). Primeiramente, deve-se notar os fatores físicos 
 
 \section{Contexto}
 
