@@ -1,4 +1,30 @@
 
+\section{Introdução}
+
+Este projeto tem o objetivo de desenvolver um controlador de elevador com o Kit LPC1768, 
+
+\section{Objeto}
+O produto tem o propósito de ser um controlador de elevador, recebendo requisições de usuários nos botões de cada andar e nos botões internos, e efetuando o controle dos atuadores (luzes de botões, motor de subida/descida e portas) conforme essas requisições. Deve-se atender às demandas dos usuários, de forma eficiente.
+
+\section{Domínio do problema}
+
+\section{Contexto}
+
+A Figura \ref{fig:diagrama_blocos} apresenta o diagrama de blocos com uma visão geral do sistema. Um computador executa continuamente uma simulação de elevador. O usuário interage diretamente com esta simulação através do mouse, pressionando botões (internos e externos) do elevador. O Kit LPC1768 faz o papel de controlador do elevador, gerenciando a lógica de movimentação e de abertura/fechamento de portas. O Kit e o computador comunicam-se via interface serial, sendo que o Kit controla o comportamento do elevador na simulação, e o computador envia ao Kit comandos de botões do usuário. 
+
+\begin{figure}[h]
+\begin{center}
+    \includegraphics[width=0.8\columnwidth]{./figures/diagrama_blocos.png}
+    \caption{Diagrama de blocos do sistema.}
+    \label{fig:diagrama_blocos}
+\end{center}
+\end{figure}
+
+
+\section{Interfaces}
+[TODO: INSERIR FIGURA DO SIMULADOR]
+
+
 \section{Especificação funcional}
 
 
@@ -28,6 +54,8 @@ Os requisitos funcionais levantados para o \it{software} são:
   \item O sistema deverá esperar no mínimo 2 segundos para fechar a porta após um botão interno ser pressionado.
 \end{enumerate}
 
+\section{Especificação não-funcional}
+
 Os requisitos não-funcionais levantados para o \it{software} são:
 
 \begin{enumerate}[label=RNF \arabic*. , ref=\arabic*]
@@ -37,15 +65,9 @@ Os requisitos não-funcionais levantados para o \it{software} são:
 \end{enumerate}
 
 
-\section{Contexto}
 
-A Figura \ref{fig:diagrama_blocos} apresenta o diagrama de blocos com uma visão geral do sistema. Um computador executa continuamente uma simulação de elevador. O usuário interage diretamente com esta simulação através do mouse, pressionando botões (internos e externos) do elevador. O Kit LPC1768 faz o papel de controlador do elevador, gerenciando a lógica de movimentação e de abertura/fechamento de portas. O Kit e o computador comunicam-se via interface serial, sendo que o Kit controla o comportamento do elevador na simulação, e o computador envia ao Kit comandos de botões do usuário. 
 
-\begin{figure}[h]
-\begin{center}
-    \includegraphics[width=0.8\columnwidth]{./figures/diagrama_blocos.png}
-    \caption{Diagrama de blocos do sistema.}
-    \label{fig:diagrama_blocos}
-\end{center}
-\end{figure}
+
+
+
 
