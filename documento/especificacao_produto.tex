@@ -59,11 +59,9 @@ Os requisitos funcionais levantados para o \it{software} são:
         \item O sistema deverá parar o elevador quando ele estiver passando por um andar que o botão externo tenha sido pressionado, se estiver indo na mesma direção que a requisição foi feita.
     \end{enumerate}
     \item O sistema deverá inverter a direção de movimento (subida/descida) se houverem requisições na direção contrária, porém somente quando tiver atendido a todas as requisições do trajeto atual.
-
-    \item O sistema deverá parar o elevador quando não houverem requisições pendentes.
-    \item O sistema deverá fechar as portas do elevador quando ele estiver ocioso.
-    
   \end{enumerate}
+  \item O sistema deverá manter o elevador parado no andar atual quando não houverem requisições pendentes.
+%   \item O sistema deverá fechar as portas do elevador quando ele estiver ocioso (sem requisições pendentes).
   \item O sistema deverá esperar no mínimo 5 segundos após as portas terem sido abertas antes de fechá-las novamente.
   \item O sistema deverá esperar meio segundo após fechar as portas antes de deslocar o elevador.
   \item O sistema deverá esperar meio segundo após o elevador parar antes de abrir as portas.
