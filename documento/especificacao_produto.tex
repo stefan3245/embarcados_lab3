@@ -23,11 +23,10 @@ Com relação à segurança, as portas somente devem ser abertas quando o elevad
 A Figura \ref{fig:diagrama_blocos} apresenta o diagrama de blocos com uma visão geral do sistema. Um computador executa continuamente uma simulação de elevador. O usuário interage diretamente com esta simulação através do mouse, pressionando botões (internos e externos) do elevador. O Kit LPC1768 faz o papel de controlador do elevador, gerenciando a lógica de movimentação e de abertura/fechamento de portas. O Kit e o computador comunicam-se via interface serial, sendo que o Kit controla o comportamento do elevador na simulação, e o computador envia ao Kit comandos de botões do usuário. 
 
 \begin{figure}[h]
-\begin{center}
+    \centering
     \includegraphics[width=0.8\columnwidth]{./figures/diagrama_blocos.png}
     \caption{Diagrama de blocos do sistema.}
     \label{fig:diagrama_blocos}
-\end{center}
 \end{figure}
 
 
