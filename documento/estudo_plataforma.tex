@@ -1,20 +1,8 @@
 
 \section{UART}
 
-A UART é o periférico presente no Kit LPC1768 responsável por efetuar a comunicação serial. Ela efetua a conversão de dados de I/O entre a interface serial e a CPU, gerenciando o processo de transmissão e recepção de dados. A UART possui filas de recepção e transmissão, configuráveis, permitindo a geração de interrupções por número de caracteres na fila ou por \it{timeout}. 
+A UART é o periférico presente no Kit LPC1768 responsável por efetuar a comunicação serial. Ela efetua a conversão de dados de I/O entre a interface serial e a CPU, gerenciando o processo de transmissão e recepção de dados. A UART possui filas FIFO de recepção e transmissão, configuráveis, permitindo a geração de interrupções por número de caracteres na fila ou por \it{timeout}. 
 
-Os registradores utilizados para a inicialização da UART são utilizados como se segue (considerando-se que a UART0 da placa foi utilizada no projeto). O registrador PCONP controla a alimentação da UART, sendo que o bit 3 deve ser ativado para ligá-la. O registrador PCLKSEL0 controla a saída do clock para a UART, sendo que os bits 6:7 devem ser habilitados para que o clock seja ativado.
+Os registradores utilizados para a inicialização da UART são utilizados como se segue (considerando-se que a UART0 da placa foi utilizada no projeto): O registrador PINSEL é utilizado para selecionar os pinos da UART, e o PINMODE é utilizado para configurar os modos dos pinos. O registrador PCONP controla a alimentação da UART, sendo que o bit 3 deve ser ativado para ligá-la. O registrador PCLKSEL0 controla a saída do clock para a UART, sendo que os bits 7:6 devem ser habilitados para que o clock seja ativado. O baudrate é ativado pelo registrador U0LCR, sendo que o bit 7 deve ser setado. Os registradores DLL (Divisor Latch LSB register) e DLM (Divisor Latch MSB register) podem então ser utilizados para configurar o valor de baudrate, de acordo com a fórmula definida na documentação do Kit LPC1768. 
 
-
-
-
-
-
-
-
-% A UART executa conversões de dados serial e paralelo entre um periférico e a CPU, permite também guardar em uma FIFO de dados de recepção e transmissão, além de possuir capacidade de controle e interrupção do sistema, o que diminui o overhead em software para gerenciar a comunicação. A base da troca de dados é um clock, que é configurado conforme medidas de baudrate específicas, e que especifica o momento em que os sinais recebidos pela serial são válidos. Um bloco de comunicação serial é caracterizado, em geral, por um bit de início, 5 a 8 bits de dados, 1 bit de paridade opcional, terminado por 1 a 2 bits de parada [8].
-
-% No LandTiger há suporte para 2 interfaces RS-232, nomeadas COM1 e COM2, associados, respectivamente, as UART0 e UART2 do LPC1768.Para que sejam utilizados como comunicação UART, os jumpers JP6 e JP7 devem estar desativados, pois as portas podem ser utilizadas para ISP. A COM1 está conectada ao UART0_TX (P0.2) e UART0_TX (P0.3), enquanto a COM2 está conectada a UART2_TX (P0.10) e UART_RX (P0.11).
-
-% Com relação ao software, um driver UART foi desenvolvido pela equipe anteriormente numa plataforma LPC 1343 e portada para o LPC 1768.
-% A alimentação da UART é realizada através do registrador PCONP (Power Control for Peripherals Register), ativando o bit 3 (PCUART0). O clock para o periférico é habilitado ativando os bits 7:6 (PCLK_UART0) do PeripheralClockSelectionRegister0 (registrador PCLKSEL0). Para configurar o baudrate é utilizado o registrador U0LCR(UART0 Line Control Register), com o bit DLAB (Divisor Latch Access Bit) definido em 1 (é o bit 7 do U0LCR) . Essa configuração habilita os registradores DLL (Divisor Latch LSB register) e DLM (Divisor Latch MSB register) que determinam o baudrate da UART e o baudrate fracionário no registrador divisor fracionário (Fractional Divider Register - FDR). Durante a configuração do U0LCR configura-se o tamanho da Word (bits 1:0), seleciona-se a quantidade de stop bits (bit 2), habilita-se ou desabilita-se a paridade (bit 3), selecionando também seu tipo (bits 5:4). Em seguida, habita-se a FIFO da UART no bit 0 do registrador U0FCR. Os pinos da UART são selecionados do registrador PINSEL e seus modos nos registradores PINMODE. As interrupções da UART são habilitadas no registrador U0LCRcom o bit DLAB0.
+O registrador U0LCR é então utilizado para configurar o tamanho da word (bits 1:0), stop bits (bit 2) e paridade (bit 3 para habilitar ou não, bits 5:4 para selecionar o tipo). O registrador U0FCR é utilizado para habilitar e limpar as FIFOs de RX e TX (setando os bits 2:0) e para configurar o número de caracteres para trigger de interrupção (bit 7). As interrupções da UART são então ativadas setando-se os bits 1:0 de U0LCR.
