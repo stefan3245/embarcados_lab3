@@ -1,7 +1,24 @@
 \chapter{Arquitetura física}
 
-
 \section{Uso de memória}
+
+A Tabela \ref{tab:uso_memoria} apresenta o uso estimado das memórias RAM e flash do Kit LPC1768 para o desenvolvimento do sistema. Considerou-se na estimativa apenas os componentes que já estavam disponíveis ao projeto anteriormente (CMSIS RTOS e driver da UART). Pela análise, como a maior parte das memórias permanece livre, considera-se que a quantidade é suficiente para o desenvolvimento dos componentes restantes do sistema.
+
+\begin{table}[h!]
+	\caption{Uso estimado das memórias do Kit LPC1768.}
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{} &\textbf{RAM (64 kB máx.)} & \textbf{Flash (512 kB máx.)} \\ \hline \hline
+		CMSIS RTOS & 2600 B & 5400 B\\
+		Driver da UART & 150 B & 800 B\\
+		\hline
+		\bf{Total ocupado} & 2750 B (2.68 kB) & 6200 B (6.05 kB)\\
+		\bf{Total Livre} & 61.32 kB (95.81\%) & 505.95 kB (98.82\%) \\
+		\hline
+	\end{tabular}
+	\label{tab:uso_memoria}
+\end{table}
 
 
 \section{Diagrama de objetos}
