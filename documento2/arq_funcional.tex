@@ -1,53 +1,39 @@
 \chapter{Arquitetura funcional}
 
+O diagrama da Figura \ref{fig:arq_funcional} expôe uma representação da arquitetura funcional do sistema. As setas representam o sentido dos fluxos de dados entre cada função do sistema. 
+
+``Comunicação com o computador'' envolve a UART (física e driver), e o protocolo de comunicação do sistema. Esta função é utilizada para a comunicação com o simulador de elevador, que é executada em um computador. ``Recebe entrada dos botões'' recebe requisições dos botões internos e externos de andares, feitas pelos usuários do elevador. A função ``Controla luzes dos botões'' é responsável por ligar ou desligar as luzes dos botões de acordo com as requisições recebidas dos usuários e de acordo com o movimento do elevador. ``Enfileira requisições'' é responsável por organizar as requisições de botões na ordem em que devem ser atendidas. ``Controla movimento das portas'' efetua a abertura e fechamento das portas, de acordo com a lógica de funcionamento do elevador. ``Controla movimento do elevador'' é responsável por fazer o elevador subir ou descer para atender às requisições enfileiradas.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{./figures/arq_funcional.png}
-    \caption{Diagrama de blocos da arquitetura funcional do sistema.}
+    \caption{Diagrama da arquitetura funcional do sistema.}
     \label{fig:arq_funcional}
 \end{figure}
 
-
-Cada uma das funções envolve as seguintes subpartes:
-
-\begin{enumerate}
-	\item Comunicação com computador
-	\begin{enumerate}
-		\item $<<$ISR$>>$ Comunicação
-		\begin{enumerate}
-			\item Efetua o gerenciamento da UART;
-			\item Possui filas FIFO de recebimento e envio de dados;
-			\item Provê ao sistema uma camada de abstração para comunicação bidirecional com o elevador (que é simulado no compuador).
-		\end{enumerate}
-	\end{enumerate}
-	
-	\item Controle do elevador
-	\begin{enumerate}
-		\item $<<$Ativo$>>$ Controlador do elevador
-		\begin{enumerate}
-			\item Acende um botão assim que um usuário o pressiona;
-			\item Atende a requisições para todos os andares;
-			\item Toma decisões e envia comandos para os atuadores do elevador;
-			\item Possui dois estados de movimento bem definidos para o elevador: subida e descida.
-% 			\item Possui um vetor que indica quais requisições de botões estão pendentes.
-		\end{enumerate}
-		\item $<<$Passivo$>>$ Protocolo de comunicação
-		\begin{enumerate}
-			\item Recebe requisições de botões de andares do elevador;
-			\item Envia comandos de acender/apagar luzes dos botões do elevador;
-			\item Envia comandos de abrir/fechar portas ao elevador;
-			\item Envia comandos de subida/descida ao elevador.
-		\end{enumerate}
-	\end{enumerate}
-\end{enumerate}
-
-
 \section{Alocação das funções em Hardware e Software}
 
-A função de comunicação com o computador constitui-se tanto de hardware quanto de software. A parte de hardware está relacionada ao periférico UART0 do Kit LPC1768. O software relaciona-se ao driver desenvolvido para inicializar e utilizar este periférico.
+\begin{table}[h!]
+\caption{Alocação das funções em Hardware e Software.}
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Bloco} &\textbf{Hardware} & \textbf{Software} \\ \hline \hline
+Comunicação com o computador & X & X \\
+Recebe entrada dos botões & - & X \\
+Controla luzes dos botões & - & X \\
+Enfileira requisições & - & X \\
+Controla movimento das portas & - & X \\
+Controla movimento do elevador & - & X \\
+\hline
+\end{tabular}
+\label{tab:publicacao}
+\end{table}
 
-A função de controle do elevador é constituída apenas de software, uma vez que constitui-se do programa a ser desenvolvido para controlar a lógica de operação do elevador.
+A função de comunicação com o computador constitui-se tanto de hardware quanto de software. A parte de hardware está relacionada ao periférico UART0 do Kit LPC1768. O software relaciona-se ao driver desenvolvido para inicializar e utilizar este periférico, além do protocolo de comunicação do sistema.
+
+O restante das funções é constituida apenas de software, pois controlam a lógica de operação do sistema, não fazendo diretamente o uso de periféricos.
+
 
 
 
