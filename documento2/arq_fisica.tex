@@ -22,3 +22,24 @@ A Tabela \ref{tab:uso_memoria} apresenta o uso estimado das memórias RAM e flas
 
 
 \section{Diagrama de objetos}
+
+
+
+\section{Projeto dos componentes}
+
+A Figura \ref{fig:maq_estados} apresenta um diagrama de estados, contendo a visão geral do funcionamento do sistema. O estado ``Inicialização'' compreende todas as funções que são necessárias para iniciar a operação do sistema (como por exemplo, inicializar o driver da UART, sistema operacional, variáveis internas, entre outros). O estado ``Ocioso'' representa a situação em que o elevador não possui requisições pendentes, sendo que neste caso ele permanece parado no mesmo andar e com as portas abertas. 
+
+Os estados ``Subindo'' e ``Descendo'' são muito similares internamente, ambos representado situações em que o elevador está atendendo a requisições de usuários. A diferença está essencialmente na direção de movimento do elevador. Os seus sub-estados especificam o modo de operação do elevador para atender às demandas de deslocamento até os andares requisitados. Todas as requisições de usuários são enfileiradas por prioridade, em uma tarefa separada (enfileirador). O próximo andar que o elevador deve ir fica sempre no topo da fila, sendo que as a maioria das decisões e transições nos estados e sub-estados depende de qual é este andar.
+
+A comunicação com o computador (executanto a simulação de elevador) está presente de forma implícita no diagrama, o que inclui o recebimento de requisições de botões, recebimento de informações de posição do elevador e envio de comandos ao elevador e portas.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\columnwidth]{./figures/maq_estados.png}
+    \caption{Diagrama de estados geral do sistema.}
+    \label{fig:maq_estados}
+\end{figure}
+
+
+
+
