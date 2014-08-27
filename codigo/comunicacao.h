@@ -3,6 +3,12 @@
 #define COMUNICACAO_H
 
 #include "uart_driver.h"
+#include "cmsis_os.h"
+
+
+typedef struct {  // Estrutura de dados da Msg Queue de envio
+	char c; //Caractere a ser enviado.
+} MsgFilaEnvio_t;
 
 /**
 * Tarefa de recebimento de mensagens do computador

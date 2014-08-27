@@ -1,13 +1,20 @@
 
 #include "comunicacao.h"
 
+osMailQId qid_filaEnvioMensagens;
+osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);
+
 void task_comunicacao(void const *arg){
 	//Inicializa a UART
     UART_init(115200);
+	//Inicializa a Msg Queue de envio de mensagens
+	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), NULL);
 	
 	char c; //Variável que contém cada caractere recebido.
 	char[10] str_numero_recebido; //Contém a string dos números recebidos
 	int numero_recebido; //Contém o número inteiro recebido
+	
+	osEvent evt; //Variável usada para ler mensagens da Msg Queue.
 	
 	//A cada iteração, verifica se existem caracteres recebidos da UART, e interpreta os caracteres recebidos.
 	//Também, envia pela UART quaisquer mensagens que estejam na fila de espera.
@@ -42,8 +49,9 @@ void task_comunicacao(void const *arg){
 		//
 		//Envia pela UART os caracteres que existem na Message Box de envio
 		//
-		while(msgbox_com_elementos){
-			
+		while(evt = osMailGet(mid_FilaConversor, 0) && evt.status == osEventMail){
+			MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) evt.value.p; //Extrai a mensagem do evento
+			UART_write(msg->c); //Escreve o caractere na UART
 		}
 	}
 }
@@ -73,7 +81,7 @@ int is_char_botao_andar(char c){
 * Envia comando de inicialização do elevador (andar 0, portas abertas)
 */
 void comunicacao_inicializa_elevador(){
-
+	//TODO enviar comando para UART;
 }
 
 /**
