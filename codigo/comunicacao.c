@@ -1,15 +1,43 @@
 
-
+#include "comunicacao.h"
 
 void task_comunicacao(void const *arg){
 	//Inicializa a UART
     UART_init(115200);
 	
-	//Permanece em espera por caracteres da UART, e interpreta os caracteres recebidos
+	char c; //Variável que contém cada caractere recebido.
+	
+	//A cada iteração, verifica se existem caracteres recebidos da UART, e interpreta os caracteres recebidos.
+	//Também, envia pela UART quaisquer mensagens que estejam na fila de espera.
 	for(;;)
 	{
-		
+		//Lê os caracteres em espera na UART
+		while(UART_read(&c) > 0){
+			switch(c){
+				case 'A':
+					//TODO: Avisar à tarefa de controle do elevador que as portas estão abertas
+					break;
+				case 'F':
+					//TODO: Avisar à tarefa de controle do elevador que as portas estão fechadas
+					break;
+				case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g': case 'h': case 'i': case 'j': 
+					//TODO: Avisar à tarefa de controle do elevador que recebeu uma requisição de botão de andar
+					//TODO: ligar a luz do botão do andar
+					break;
+			}
+		}
+		//Envia os caracteres da Message Box de envio
+		while(msgbox_com_elementos){
+			
+		}
 	}
+}
+
+/**
+* Envia comando de inicialização do elevador (andar 0, portas abertas)
+*/
+void comunicacao_inicializa_elevador(){
+
 }
 
 /**
@@ -42,6 +70,13 @@ void comunicacao_envia_comando_movimento(int direcao){
 *    direcao <  0 para fechamento
 */
 void comunicacao_envia_comando_portas(int direcao){
+	//TODO enviar mensagem para a UART
+}
+
+/**
+* Envia uma requisição de qual andar o elevador está no momento.
+*/
+void comunicacao_envia_consulta_andar(){
 	//TODO enviar mensagem para a UART
 }
 

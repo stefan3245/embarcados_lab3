@@ -36,4 +36,9 @@ void comunicacao_envia_comando_movimento(int direcao);
 */
 void comunicacao_envia_comando_portas(int direcao);
 
+/**
+* Envia uma requisição de qual andar o elevador está no momento.
+*/
+void comunicacao_envia_consulta_andar();
+
 #endif
