@@ -10,6 +10,16 @@
 void task_comunicacao(void const *arg);
 
 /**
+* Testa se o caractere é um número
+*/
+int is_number(char c);
+
+/**
+* Testa se o caractere equivale a um botão de andar
+*/
+int is_char_botao_andar(char c);
+
+/**
 * Executa os procedimentos que indicam que uma requisição de andar foi atendida. 
 * Isto envolve atualmente apenas apagar a(s) luz(es) internas (ou externas) do andar correspondente.
 * @param andar O andar atendido pelo elevador

@@ -6,32 +6,68 @@ void task_comunicacao(void const *arg){
     UART_init(115200);
 	
 	char c; //Variável que contém cada caractere recebido.
+	char[10] str_numero_recebido; //Contém a string dos números recebidos
+	int numero_recebido; //Contém o número inteiro recebido
 	
 	//A cada iteração, verifica se existem caracteres recebidos da UART, e interpreta os caracteres recebidos.
 	//Também, envia pela UART quaisquer mensagens que estejam na fila de espera.
 	for(;;)
 	{
+		//
 		//Lê os caracteres em espera na UART
+		//
 		while(UART_read(&c) > 0){
-			switch(c){
-				case 'A':
-					//TODO: Avisar à tarefa de controle do elevador que as portas estão abertas
-					break;
-				case 'F':
-					//TODO: Avisar à tarefa de controle do elevador que as portas estão fechadas
-					break;
-				case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g': case 'h': case 'i': case 'j': 
-					//TODO: Avisar à tarefa de controle do elevador que recebeu uma requisição de botão de andar
+			if(is_number(c)){
+				int i = 0;
+				//Verifica os próximos caracteres do buffer, para ver se há mais algarismos.
+				do{
+					str_numero_recebido[i] = c;
+					i++;
+				} while(UART_read(&c) > 0 && is_number(c)); //Verifica se o próximo caractere é um algarismo também.
+				str_numero_recebido[i] = '\0'; //Termina a string.
+				numero_recebido = atoi(str_numero_recebido); //Converte a string para int
+				//TODO: avisar à tarefa ControleElevador sobre a posição atual
+			} //Não tem 'else' aqui, pois os próximos IFs devem ser testados sempre.
+			if(c == 'A'){
+				//TODO: Avisar à tarefa de ControleElevador que as portas estão abertas
+			} else 
+			if (c == 'F') {
+				//TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
+			} else
+			if (is_char_botao_andar(c)){
+					//TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
 					//TODO: ligar a luz do botão do andar
-					break;
 			}
 		}
-		//Envia os caracteres da Message Box de envio
+		//
+		//Envia pela UART os caracteres que existem na Message Box de envio
+		//
 		while(msgbox_com_elementos){
 			
 		}
 	}
 }
+
+/**
+* Testa se o caractere é um número
+*/
+int is_number(char c){
+	if(c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
+		return 1;
+	else
+		return 0;
+}
+
+/**
+* Testa se o caractere equivale a um botão de andar
+*/
+int is_char_botao_andar(char c){
+	if(c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e' || c == 'f' || c == 'g' || c == 'h' || c == 'i' || c == 'j')
+		return 1;
+	else
+		return 0;
+}
+
 
 /**
 * Envia comando de inicialização do elevador (andar 0, portas abertas)
