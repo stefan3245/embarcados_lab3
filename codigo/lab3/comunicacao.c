@@ -4,8 +4,6 @@ osMailQId qid_filaEnvioMensagens;
 osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);
 
 void task_comunicacao(void const *arg){
-	//Inicializa a UART
-    UART_init(115200);
 	//Inicializa a Msg Queue de envio de mensagens
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), osThreadGetId());
 	

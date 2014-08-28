@@ -763,8 +763,7 @@
         </option>
         <option>
           <name>IlinkAdditionalLibs</name>
-          <state>G:\Dropbox\Faculdade\9_periodo\sistEmbarcados\labs\3\git\embarcados_lab3\codigo\lib-cmsis-os\rtx\RTX_CM3.a</state>
-          <state>G:\Dropbox\Faculdade\9_periodo\sistEmbarcados\labs\3\git\embarcados_lab3\codigo\lib-cmsis-os\rtx\RTX_Lib_CM.a</state>
+          <state></state>
         </option>
         <option>
           <name>IlinkOverrideProgramEntryLabel</name>
@@ -1930,10 +1929,16 @@
     <group>
       <name>rtx</name>
       <file>
+        <name>$PROJ_DIR$\lib-cmsis-os\rtx\RTX_CM3.a</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\lib-cmsis-os\rtx\RTX_CM_lib.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\lib-cmsis-os\rtx\RTX_Conf_CM.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\lib-cmsis-os\rtx\RTX_Lib_CM.a</name>
       </file>
     </group>
     <file>

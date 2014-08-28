@@ -9,6 +9,7 @@
 
 #define CR 0xD
 
+extern osMailQId qid_filaEnvioMensagens;
 
 typedef struct {  // Estrutura de dados da Msg Queue de envio
         char texto[10]; //Texto a ser enviado.

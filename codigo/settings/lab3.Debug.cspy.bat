@@ -19,6 +19,6 @@
 @REM 
 
 
-"F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\common\bin\cspybat" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armproc.dll" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armsim2.dll"  %1 --plugin "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armbat.dll" --device_macro "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\config\debugger\NXP\Trace_LPC175x_LPC176x.dmac" --backend -B "--endian=little" "--cpu=Cortex-M3" "--fpu=None" "-p" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\CONFIG\debugger\NXP\LPC1768.ddf" "--semihosting" "--device=LPC1768" "--multicore_nr_of_cores=1" 
+"F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\common\bin\cspybat" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armproc.dll" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armjlink.dll"  %1 --plugin "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armbat.dll" --device_macro "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\config\debugger\NXP\Trace_LPC175x_LPC176x.dmac" --backend -B "--endian=little" "--cpu=Cortex-M3" "--fpu=None" "-p" "F:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\CONFIG\debugger\NXP\LPC1768.ddf" "--semihosting" "--device=LPC1768" "--drv_communication=USB0" "--jlink_speed=auto" "--jlink_initial_speed=1000" "--jlink_reset_strategy=0,0" "--drv_catch_exceptions=0x000" "--drv_swo_clock_setup=72000000,0,2000000" 
 
 
