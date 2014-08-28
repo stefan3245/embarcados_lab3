@@ -9,7 +9,7 @@ void task_comunicacao(void const *arg){
 	for(;;)
 	{
 		//
-		//Lê um caractere em espera na UART (caso exista)
+		//Lê um caractere em espera na UART (caso haja)
 		//
 		if(UART_read(&c[0]) > 0){
             if(is_number(c[0])){
@@ -37,12 +37,12 @@ void task_comunicacao(void const *arg){
                 }
             } else if(c[0] == 'A'){ //Informação de portas abertas
 				//TODO: Avisar à tarefa de ControleElevador que as portas estão abertas
-                //(o simulador tem um bug, pois não avisa quando a porta está aberta)
+                //(NOTE: o simulador tem um bug, pois não avisa quando a porta está aberta)
                 
                 if(DEBUG) printf("[Comunicacao] Portas abertas.\n");
 			} else if (c[0] == 'F'){ //Informação de portas fechadas
                 //TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
-                //(o simulador tem um bug, pois não avisa quando a porta está fechada)
+                //(NOTE: o simulador tem um bug, pois não avisa quando a porta está fechada)
                 
                 if(DEBUG) printf("[Comunicacao] Portas fechadas.\n");
             } else if (is_char_botao_andar(c[0])){ //Botão pressionado
@@ -54,7 +54,7 @@ void task_comunicacao(void const *arg){
             }
 		}
 		//
-		//Envia para a UART a próxima string que exista na Mail Queue de envio
+		//Envia para a UART a próxima string que esteja na Mail Queue
 		//
         evt = osMailGet(qid_filaEnvioMensagens, 1);
 		if(evt.status == osEventMail){
