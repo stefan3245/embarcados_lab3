@@ -3,7 +3,10 @@
 #define COMUNICACAO_H
 
 #include "uart_driver.h"
-#include "cmsis_os.h"
+#include <cmsis_os.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h> 
 
 
 typedef struct {  // Estrutura de dados da Msg Queue de envio

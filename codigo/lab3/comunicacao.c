@@ -11,7 +11,7 @@ void task_comunicacao(void const *arg){
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), NULL);
 	
 	char c; //Variável que contém cada caractere recebido.
-	char[10] str_numero_recebido; //Contém a string dos números recebidos
+	char str_numero_recebido[10]; //Contém a string dos números recebidos
 	int numero_recebido; //Contém o número inteiro recebido
 	
 	osEvent evt; //Variável usada para ler mensagens da Msg Queue.
@@ -47,11 +47,13 @@ void task_comunicacao(void const *arg){
 			}
 		}
 		//
-		//Envia pela UART os caracteres que existem na Message Box de envio
+		//Envia pela UART os caracteres que existem na Message Queue de envio
 		//
-		while(evt = osMailGet(mid_FilaConversor, 0) && evt.status == osEventMail){
-			MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) evt.value.p; //Extrai a mensagem do evento
+                evt = osMailGet(qid_filaEnvioMensagens, 0);
+		while(evt.status == osEventMail){
+			MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) evt.value.p; //Extrai os dados da mensagem
 			UART_write(msg->c); //Escreve o caractere na UART
+                        evt = osMailGet(qid_filaEnvioMensagens, 0); //Verifica se há mais mensagens na fila
 		}
 	}
 }
