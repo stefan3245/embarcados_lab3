@@ -51,7 +51,11 @@ void task_comunicacao(void const *arg){
                 evt = osMailGet(qid_filaEnvioMensagens, 0);
 		while(evt.status == osEventMail){
 			MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) evt.value.p; //Extrai os dados da mensagem
-			UART_write(msg->c); //Escreve o caractere na UART
+			int i;
+			for(i = 0; i<strlen(msg->texto); i++){//Escreve a string na UART
+				UART_write(msg->texto[i]); //Escreve o caractere na UART
+			}
+                        UART_write(CR);//Escreve um caractere de fim de linha
                         evt = osMailGet(qid_filaEnvioMensagens, 0); //Verifica se há mais mensagens na fila
 		}
 	}
@@ -77,24 +81,86 @@ int is_char_botao_andar(char c){
 		return 0;
 }
 
+/**
+* Retorna o caractere que corresponde ao botao externo do andar e à direção (subida/descida)
+* @param andar
+* @param direcao Direção atendida pelo elevador:
+*	direcao >= 0 Para requisicao de subida
+*	direcao <  0 Para requisicao de descida
+*/
+char get_char_botao_externo(int andar, int direcao){
+    switch (andar){
+    case 0:
+        return 'a';
+        break;
+    case 1:
+        if(direcao < 0) return 'b';
+        else return 'c';
+        break;
+    case 2:
+        if(direcao < 0) return 'd';
+        else return 'e';
+        break;
+    case 3:
+    default:
+        return 'f';
+        break;
+    }
+}
+
+/**
+* Retorna o caractere que corresponde ao botao interno do andar
+*/
+char get_char_botao_interno(int andar){
+    return andar+'g';
+}
+
 
 /**
 * Envia comando de inicialização do elevador (andar 0, portas abertas)
 */
 void comunicacao_inicializa_elevador(){
-	//TODO enviar comando para UART;
+	//Adiciona o comando 'R' à Msg Queue
+	MsgFilaEnvio_t msg;
+	msg.texto[0] = 'R';
+        msg.texto[1] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
 /**
 * Executa os procedimentos que indicam que uma requisição de andar foi atendida. 
-* Isto envolve atualmente apenas apagar a(s) luz(es) internas (ou externas) do andar correspondente.
+* Isto envolve atualmente apenas apagar as luzes internas e externas dos botões do andar (e direção) correspondentes.
 * @param andar O andar atendido pelo elevador
 * @param direcao Direção atendida pelo elevador:
 *	direcao >= 0 Para requisicao de subida
 *	direcao <  0 Para requisicao de descida
 */
 void comunicacao_envia_requisicao_atendida(int andar, int direcao){
-	//TODO enviar mensagem para a UART
+        //Adiciona os comandos de desligar luz dos botões à Msg Queue
+        //Desliga o botão interno
+	MsgFilaEnvio_t msg_interno;
+	msg_interno.texto[0] = 'D';
+        msg_interno.texto[1] = get_char_botao_interno(andar);
+        msg_interno.texto[2] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) &msg_interno);
+        //Desliga o botão externo
+        MsgFilaEnvio_t msg_externo;
+	msg_externo.texto[0] = 'D';
+        msg_externo.texto[1] = get_char_botao_externo(andar, direcao);
+        msg_externo.texto[2] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) &msg_externo);
+}
+
+/**
+* Envia comando para ligar a luz do botão especificado
+*/
+void comunicacao_envia_comando_ligar_botao(char botao){
+        //Adiciona o comando à Msg Queue
+	MsgFilaEnvio_t msg;
+        msg.texto[0] = 'L';
+	msg.texto[1] = botao;
+        msg.texto[2] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
 /**
@@ -105,24 +171,50 @@ void comunicacao_envia_requisicao_atendida(int andar, int direcao){
 *	direcao = 0 para parada
 */
 void comunicacao_envia_comando_movimento(int direcao){
-	//TODO enviar mensagem para a UART
+	char comando;
+        if(direcao > 0)
+            comando = 's';
+        else if(direcao < 0)
+            comando = 'd';
+        else
+            comando = 'p';
+        
+        //Adiciona o comando à Msg Queue
+	MsgFilaEnvio_t msg;
+	msg.texto[0] = comando;
+        msg.texto[1] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
 /**
 * Envia um comando de movimento (abertura/fechamento) das portas.
 * @param direcao :
-*	 direcao >= 0 para abertura
-*    direcao <  0 para fechamento
+*       direcao >= 0 para abertura
+*       direcao <  0 para fechamento
 */
 void comunicacao_envia_comando_portas(int direcao){
-	//TODO enviar mensagem para a UART
+        char comando;
+        if(direcao >=0)
+            comando = 'a';
+        else
+            comando = 'f';
+        
+        //Adiciona o comando à Msg Queue
+	MsgFilaEnvio_t msg;
+	msg.texto[0] = comando;
+        msg.texto[1] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
 /**
-* Envia uma requisição de qual andar o elevador está no momento.
+* Envia uma requisição para saber qual é a posição atual do elevador.
 */
 void comunicacao_envia_consulta_andar(){
-	//TODO enviar mensagem para a UART
+	//Adiciona o comando à Msg Queue
+	MsgFilaEnvio_t msg;
+	msg.texto[0] = 'x';
+        msg.texto[1] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
 
