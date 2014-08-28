@@ -3,14 +3,17 @@
 #include "mcu_regs.h"
 #include "systick_clock.h"
 
+//Definição do timer de ticks do sistema
 osTimerId timer_Tick;
 osTimerDef(Tick, Tick_Handler);
 
+//Defifições de Threads
 osThreadId tid_Comunicacao;
 osThreadDef(task_comunicacao, osPriorityNormal, 1, 0);
 
+//Definições de Mail Queues
 osMailQId qid_filaEnvioMensagens;
-osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);
+osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);//Fila de envio de mensagens (tarefa Comunicacao)
 
 int main()
 {
@@ -20,12 +23,13 @@ int main()
     printf("Inicializando...\n");
     //Inicializa as Threads
     tid_Comunicacao = osThreadCreate(osThread(task_comunicacao), NULL);
-     if (tid_Comunicacao == NULL) {
+    if (tid_Comunicacao == NULL) {
          printf("Erro ao criar Thread de Comunicacao!\n");
     }
     //Inicializa a Mail Queue de envio de mensagens (Tarefa de Comunicacao)
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), tid_Comunicacao);
-    //comunicacao_envia_comando_ligar_botao('a'); //Testa a funcionalidade de envio de mensagens
+    //Inicializa o elevador na posicao inicial
+    comunicacao_envia_comando_inicializa_elevador();
     //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (isso foi testado com sucesso).
     return 0;
 }

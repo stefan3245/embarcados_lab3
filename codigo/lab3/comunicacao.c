@@ -115,17 +115,17 @@ char get_char_botao_interno(int andar){
 /**
 * Envia comando de inicialização do elevador (andar 0, portas abertas)
 */
-void comunicacao_inicializa_elevador(){
+void comunicacao_envia_comando_inicializa_elevador(){
 	//Adiciona o comando 'R' à Mail Queue
 	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
 	msg->texto[0] = 'R';
     msg->texto[1] = '\0';
-	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
+	osMailPut(qid_filaEnvioMensagens, (void*) msg);
 }
 
 /**
 * Executa os procedimentos que indicam que uma requisição de andar foi atendida. 
-* Isto envolve atualmente apenas apagar as luzes internas e externas dos botões do andar (e direção) correspondentes.
+* Basicamente, apenas apaga as luzes internas e externas dos botões do andar (e direção) correspondente.
 * @param andar O andar atendido pelo elevador
 * @param direcao Direção atendida pelo elevador:
 *	direcao >= 0 Para requisicao de subida
@@ -179,7 +179,7 @@ void comunicacao_envia_comando_movimento(int direcao){
 	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
 	msg->texto[0] = comando;
     msg->texto[1] = '\0';
-	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
+	osMailPut(qid_filaEnvioMensagens, (void*) msg);
 }
 
 /**
@@ -199,7 +199,7 @@ void comunicacao_envia_comando_portas(int direcao){
 	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
 	msg->texto[0] = comando;
     msg->texto[1] = '\0';
-	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
+	osMailPut(qid_filaEnvioMensagens, (void*) msg);
 }
 
 /**
@@ -210,7 +210,7 @@ void comunicacao_envia_consulta_andar(){
 	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
 	msg->texto[0] = 'x';
     msg->texto[1] = '\0';
-	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
+	osMailPut(qid_filaEnvioMensagens, (void*) msg);
 }
 
 

@@ -50,6 +50,11 @@ char get_char_botao_externo(int andar, int direcao);
 char get_char_botao_interno(int andar);
 
 /**
+* Envia comando de inicialização do elevador (andar 0, portas abertas)
+*/
+void comunicacao_envia_comando_inicializa_elevador();
+
+/**
 * Executa os procedimentos que indicam que uma requisição de andar foi atendida. 
 * Isto envolve atualmente apenas apagar a(s) luz(es) internas (ou externas) do andar correspondente.
 * @param andar O andar atendido pelo elevador
