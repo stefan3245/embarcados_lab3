@@ -7,7 +7,7 @@ osTimerId timer_Tick;
 osTimerDef(Tick, Tick_Handler);
 
 osThreadId tid_Comunicacao;
-osThreadDef(task_comunicacao, osPriorityNormal, 1, 2048);
+osThreadDef(task_comunicacao, osPriorityNormal, 1, 0);
 
 osMailQId qid_filaEnvioMensagens;
 osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);
@@ -17,9 +17,13 @@ int main()
     SystemCoreClockUpdate();
     //Inicializa a UART
     UART_init(115200);
-    UART_write('k');
+    printf("Oi\n");
     //Inicializa as Threads
     tid_Comunicacao = osThreadCreate(osThread(task_comunicacao), NULL);
+     if (tid_Comunicacao == NULL) { // handle thread creation
+        // Failed to create a thread
+         printf("Erro\n");
+    }
     //Inicializa a Msg Queue de envio de mensagens
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), tid_Comunicacao);
     osDelay(1000);

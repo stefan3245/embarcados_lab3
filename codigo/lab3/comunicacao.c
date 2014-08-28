@@ -1,7 +1,6 @@
 #include "comunicacao.h"
 
 void task_comunicacao(void const *arg){
-    UART_write('k');
 	char c; //Variável que contém cada caractere recebido.
 	char str_numero_recebido[10]; //Contém a string dos números recebidos
 	int numero_recebido; //Contém o número inteiro recebido
@@ -151,11 +150,11 @@ void comunicacao_envia_requisicao_atendida(int andar, int direcao){
 */
 void comunicacao_envia_comando_ligar_botao(char botao){
     //Adiciona o comando à Msg Queue
-	MsgFilaEnvio_t msg;
-    msg.texto[0] = 'L';
-	msg.texto[1] = botao;
-    msg.texto[2] = '\0';
-	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
+	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
+    msg->texto[0] = 'L';
+	msg->texto[1] = botao;
+    msg->texto[2] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) msg);
 }
 
 /**
