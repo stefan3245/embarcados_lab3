@@ -1,4 +1,4 @@
-
+ï»¿
 #ifndef COMUNICACAO_H
 #define COMUNICACAO_H
 
@@ -19,20 +19,20 @@ typedef struct {  // Estrutura de dados da Msg Queue de envio
 void task_comunicacao(void const *arg);
 
 /**
-* Testa se o caractere é um número
+* Testa se o caractere Ã© um nÃºmero
 */
 int is_number(char c);
 
 /**
-* Testa se o caractere equivale a um botão de andar
+* Testa se o caractere equivale a um botÃ£o de andar
 */
 int is_char_botao_andar(char c);
 
 /**
-* Executa os procedimentos que indicam que uma requisição de andar foi atendida. 
+* Executa os procedimentos que indicam que uma requisiÃ§Ã£o de andar foi atendida. 
 * Isto envolve atualmente apenas apagar a(s) luz(es) internas (ou externas) do andar correspondente.
 * @param andar O andar atendido pelo elevador
-* @param direcao Direção atendida pelo elevador:
+* @param direcao DireÃ§Ã£o atendida pelo elevador:
 *	direcao >= 0 Para requisicao de subida
 *	direcao <  0 Para requisicao de descida
 */
@@ -56,7 +56,7 @@ void comunicacao_envia_comando_movimento(int direcao);
 void comunicacao_envia_comando_portas(int direcao);
 
 /**
-* Envia uma requisição de qual andar o elevador está no momento.
+* Envia uma requisiÃ§Ã£o de qual andar o elevador estÃ¡ no momento.
 */
 void comunicacao_envia_consulta_andar();
 

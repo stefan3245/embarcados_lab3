@@ -89,3 +89,39 @@ sympy-plots-for-*.tex/
 *.xdy
 documento2/misc/statemachine.asta.bak
 documento2/main.pdf
+
+
+
+#### IAR FILES
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# IAR
+*/Debug/*
+*/Release/*
+*.dep
+*.ewd
+*.dni
+*.wsdt

@@ -1,4 +1,4 @@
-#ifndef _UART_DRIVER_
+ï»¿#ifndef _UART_DRIVER_
 #define _UART_DRIVER_
  
 #include "lpc17xx.h"
@@ -35,10 +35,10 @@ void UART_IRQHandler(void);
 //Inicializacao da UART
 void UART_init(uint32_t baudrate);
 
-//Função de escrita da UART
+//FunÃ§Ã£o de escrita da UART
 void UART_write(char c);
 
-//Função de leitura da UART
+//FunÃ§Ã£o de leitura da UART
 //Retorna a quantidade de caracteres lidos
 int UART_read(char* c);
 

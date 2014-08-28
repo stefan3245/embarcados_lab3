@@ -1,4 +1,4 @@
-#include "cbuf.h"
+ï»¿#include "cbuf.h"
 
 //Inicializa o buffer
 void cbuf_init(struct cbuf_s* cbuf, char* data, int size){
@@ -22,7 +22,7 @@ void cbuf_init_with_value(struct cbuf_s* cbuf, char* data, int size, char initia
 void cbuf_push(struct cbuf_s* cbuf, char c){
     
     cbuf->data[cbuf->end] = c;
-    cbuf->end = (cbuf->end + 1) % cbuf->size; //Incrementa o contador de fim, e retorna ao início caso tenha chego ao final do buffer.
+    cbuf->end = (cbuf->end + 1) % cbuf->size; //Incrementa o contador de fim, e retorna ao inÃ­cio caso tenha chego ao final do buffer.
     if(cbuf->num_data >= cbuf->size){
         cbuf->start = (cbuf->start + 1) % cbuf->size;
     }else{
@@ -30,9 +30,9 @@ void cbuf_push(struct cbuf_s* cbuf, char c){
     }
 }
 
-//Retira e retorna o valor do início do buffer
+//Retira e retorna o valor do inÃ­cio do buffer
 char cbuf_pop(struct cbuf_s* cbuf){
-    if(cbuf->num_data <= 0) //Caso não hajam valores no buffer, retorna '\0'
+    if(cbuf->num_data <= 0) //Caso nÃ£o hajam valores no buffer, retorna '\0'
         return '\0';
     char c = cbuf->data[cbuf->start];
     cbuf->start = (cbuf->start + 1) % cbuf->size;

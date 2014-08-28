@@ -1,12 +1,12 @@
-#ifndef _cbuf_
+Ôªø#ifndef _cbuf_
 #define _cbuf_
 
 //
-//ImplementaÁ„o de buffer circular
+//Implementa√ß√£o de buffer circular
 //
 struct cbuf_s {
 	char* data;
-        int size; //Tamanho m·ximo do buffer
+        int size; //Tamanho m√°ximo do buffer
 	int start;
 	int end;
         int num_data; //Numero de elementos no buffer

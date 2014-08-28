@@ -1,4 +1,4 @@
-#include "LPC17xx.h"
+Ôªø#include "LPC17xx.h"
 #include "lpc17xx_clkpwr.h"
 #include "lpc17xx_pinsel.h"
 #include "mcu_regs.h"
@@ -17,7 +17,7 @@ struct cbuf_s UART_RxBuffer;
 struct cbuf_s UART_TxBuffer;
 char UART_RxBuffer_Data[BUFFER_RX_SIZE];
 char UART_TxBuffer_Data[BUFFER_TX_SIZE];
-//Indica se a FIFO de TX est· pronta para receber um novo dado
+//Indica se a FIFO de TX est√° pronta para receber um novo dado
 volatile uint8_t TxReady = 1;
 
 #define LPC_UART            LPC_UART0
@@ -32,36 +32,36 @@ void UART_IRQHandler(void)
     //TESTE COM SCOPE
     LPC_GPIO1->FIOSET |= (1<<10); //Seta a porta p1.10
     
-    //Verifica qual È o tipo da interrupÁ„o
+    //Verifica qual √© o tipo da interrup√ß√£o
     uint8_t interrupt_type = LPC_UART->IIR;
-    //Desconsidera o primeiro bit (flag global de interrupÁ„o)
+    //Desconsidera o primeiro bit (flag global de interrup√ß√£o)
     interrupt_type >>= 1;
-    //Considera sÛ os 3 primeiros bits do resultado (que representam qual È o tipo da interrupÁ„o)
+    //Considera s√≥ os 3 primeiros bits do resultado (que representam qual √© o tipo da interrup√ß√£o)
     interrupt_type &= 0x07;
     
-    //InterrupÁ„o RLS (receive line status), que È o tipo com maior prioridade (normalmente indica erro no recebimento)
+    //Interrup√ß√£o RLS (receive line status), que √© o tipo com maior prioridade (normalmente indica erro no recebimento)
     if (interrupt_type == IIR_RLS)
     {        
         uint8_t LSRValue = LPC_UART->LSR;
         //Erros de recebimento
         if (LSRValue & (LSR_OE | LSR_PE | LSR_FE | LSR_RXFE | LSR_BI))
         {
-            //Limpa a interrupÁ„o, fazendo uma leitura que ser· descartada
+            //Limpa a interrup√ß√£o, fazendo uma leitura que ser√° descartada
             UARTStatus = LSRValue;
             uint8_t Dummy = LPC_UART->RBR;
             return;
         }
-        //Dados disponÌveis em RX (RDR = Receive Data Ready)
+        //Dados dispon√≠veis em RX (RDR = Receive Data Ready)
         else if (LSRValue & LSR_RDR)
         {
             while (LPC_UART->LSR & LSR_RDR)
-            { // lÍ tudo da FIFO e armazena no buffer circular de leitura
+            { // l√™ tudo da FIFO e armazena no buffer circular de leitura
                 cbuf_push(&UART_RxBuffer, LPC_UART->RBR);
             }
         }
     }
-    //InterrupÁ„o do tipo RDA (receive data available), que È a segunda em prioridade. 
-    //Ela È ativada quando o n˙mero de caracteres no buffer passa do nÌvel de trigger (no caso 8 caracteres).
+    //Interrup√ß√£o do tipo RDA (receive data available), que √© a segunda em prioridade. 
+    //Ela √© ativada quando o n√∫mero de caracteres no buffer passa do n√≠vel de trigger (no caso 8 caracteres).
     else if (interrupt_type == IIR_RDA)
     {
         //faz a leitura dos dados da fila
@@ -70,8 +70,8 @@ void UART_IRQHandler(void)
             cbuf_push(&UART_RxBuffer, LPC_UART->RBR);
         }
     }
-    //InterrupÁ„o do tipo CTI (caracter timeout indicator).
-    //Ela È ativada se passar muito tempo sem receber caracteres (de 3.5 a 4.5 vezes o tempo de um caractere)
+    //Interrup√ß√£o do tipo CTI (caracter timeout indicator).
+    //Ela √© ativada se passar muito tempo sem receber caracteres (de 3.5 a 4.5 vezes o tempo de um caractere)
     else if (interrupt_type == IIR_CTI)
     {            
         //faz a leitura dos dados da fila
@@ -80,16 +80,16 @@ void UART_IRQHandler(void)
             cbuf_push(&UART_RxBuffer, LPC_UART->RBR);
         }
     }
-    //InterrupÁ„o do tipo THRE (transmit holding register empty)
-    //Ela ocorre quando a FIFO de transmiss„o da UART fica vazia
+    //Interrup√ß√£o do tipo THRE (transmit holding register empty)
+    //Ela ocorre quando a FIFO de transmiss√£o da UART fica vazia
     else if (interrupt_type == IIR_THRE)
     {
-        //O THR est· livre (o bit THRE est· setado no registrador LSR)
+        //O THR est√° livre (o bit THRE est√° setado no registrador LSR)
         if (LPC_UART->LSR & LSR_THRE)
         {
-            //Se n„o existirem dados para transmitir...
+            //Se n√£o existirem dados para transmitir...
             if(UART_TxBuffer.num_data <= 0){
-                //Indica que a transmiss„o est· livre
+                //Indica que a transmiss√£o est√° livre
                 TxReady = 1;
             }else{
                 //Enquanto existirem dados para transmitir...
@@ -99,14 +99,14 @@ void UART_IRQHandler(void)
                     LPC_UART->THR = cbuf_pop(&UART_TxBuffer);
                     count++;
                 }
-                //Indica que a transmiss„o est· ocupada
+                //Indica que a transmiss√£o est√° ocupada
                 TxReady = 0;
             }
         }
         else
         {
-            //O THRE ainda possui dados v·lidos.
-            //Indica que a transmiss„o est· ocupada
+            //O THRE ainda possui dados v√°lidos.
+            //Indica que a transmiss√£o est√° ocupada
             TxReady = 0;
         }
     }
@@ -152,14 +152,14 @@ void UART_init(uint32_t baudrate)
     //Inicializa o clock da UART
     CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCUART, ENABLE);
     
-    //Define 8 bits, 1 stop bit, sem paridade (isso È definido no Line Control Register)
+    //Define 8 bits, 1 stop bit, sem paridade (isso √© definido no Line Control Register)
     LPC_UART->LCR = 0x03;
     
     //Configura a baud rate.
     //Primeiramente, habilita o Divisor Latch Access Bit (DLAB) no registrador LCR
     LPC_UART->LCR |= 0x80;
-    //Depois, configura o FDR (Fractional Divider Register), bits 0:3, para que n„o seja utilizado.
-    //De acordo com o manual, o fator MULVAL (bits 7:4) deve ser >= 1, mesmo que o FDR n„o seja usado.
+    //Depois, configura o FDR (Fractional Divider Register), bits 0:3, para que n√£o seja utilizado.
+    //De acordo com o manual, o fator MULVAL (bits 7:4) deve ser >= 1, mesmo que o FDR n√£o seja usado.
     LPC_UART->FDR = 0x10;
     
     //Calcula a baud rate
@@ -175,7 +175,7 @@ void UART_init(uint32_t baudrate)
     //Limpa o LSR, fazendo-se uma leitura dele
     regVal = LPC_UART->LSR;
         
-    //Habilita a interrupÁ„o da UART
+    //Habilita a interrup√ß√£o da UART
     NVIC_EnableIRQ(UART_IRQn);
     LPC_UART->IER |= IER_RBR | IER_THRE | IER_RLS;
     
@@ -183,10 +183,10 @@ void UART_init(uint32_t baudrate)
 }
 
 
-//Escreve um caractere no buffer circular de TX (e j· manda-o pela UART, caso a FIFO de TX esteja livre)
+//Escreve um caractere no buffer circular de TX (e j√° manda-o pela UART, caso a FIFO de TX esteja livre)
 void UART_write(char c)
 {
-    //Insere o conte˙do no buffer circular de transmiss„o
+    //Insere o conte√∫do no buffer circular de transmiss√£o
     cbuf_push(&UART_TxBuffer, c);
     
     //Escreve o caractere na FIFO TX da UART caso esteja livre
