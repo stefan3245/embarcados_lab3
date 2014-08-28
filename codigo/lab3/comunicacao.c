@@ -5,7 +5,7 @@ osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);
 
 void task_comunicacao(void const *arg){
 	//Inicializa a UART
-    UART_init(115200);
+        UART_init(115200);
 	//Inicializa a Msg Queue de envio de mensagens
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), NULL);
 	
@@ -23,26 +23,29 @@ void task_comunicacao(void const *arg){
 		//Lê os caracteres em espera na UART
 		//
 		while(UART_read(&c) > 0){
-			if(is_number(c)){
+			if(is_number(c)){ //Informação de posicionamento do elevador
 				int i = 0;
 				//Verifica os próximos caracteres do buffer, para ver se há mais algarismos.
 				do{
 					str_numero_recebido[i] = c;
 					i++;
-				} while(UART_read(&c) > 0 && is_number(c)); //Verifica se o próximo caractere é um algarismo também.
+				} while(i < 4 && UART_read(&c) > 0 && is_number(c)); //Verifica se o próximo caractere é um algarismo também (podem ter no máximo 4 algarismos em uma mensagem).
 				str_numero_recebido[i] = '\0'; //Termina a string.
-				numero_recebido = atoi(str_numero_recebido); //Converte a string para int
+                                //Converte a string para int (esta variável agora indica qual é a posição do elevador)
+				numero_recebido = atoi(str_numero_recebido); 
 				//TODO: avisar à tarefa ControleElevador sobre a posição atual
 			} //Não tem 'else' aqui, pois os próximos IFs devem ser testados sempre.
-			if(c == 'A'){
+			if(c == 'A'){ //Informação de portas abertas
 				//TODO: Avisar à tarefa de ControleElevador que as portas estão abertas
 			} else 
-			if (c == 'F') {
+			if (c == 'F'){ //Informação de portas fechadas
 				//TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
 			} else
-			if (is_char_botao_andar(c)){
-					//TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
-					//TODO: ligar a luz do botão do andar
+			if (is_char_botao_andar(c)){ //Botão pressionado
+				//TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
+                            
+                                //liga a luz do botão correspondente
+                                comunicacao_envia_comando_ligar_botao(c);
 			}
 		}
 		//
