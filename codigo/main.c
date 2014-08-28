@@ -30,6 +30,13 @@ int main()
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), tid_Comunicacao);
     //Inicializa o elevador na posicao inicial
     comunicacao_envia_comando_inicializa_elevador();
-    //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (isso foi testado com sucesso).
+//    //Testes
+//    comunicacao_envia_comando_movimento(1);
+//    while(1){
+//        osDelay(1000);
+//        comunicacao_envia_consulta_andar();
+//    }
+    
+    //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (fato comprovado na prática).
     return 0;
 }

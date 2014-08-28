@@ -37,10 +37,12 @@ void task_comunicacao(void const *arg){
                 }
             } else if(c[0] == 'A'){ //Informação de portas abertas
 				//TODO: Avisar à tarefa de ControleElevador que as portas estão abertas
+                //(o simulador tem um bug, pois não avisa quando a porta está aberta)
                 
                 if(DEBUG) printf("[Comunicacao] Portas abertas.\n");
 			} else if (c[0] == 'F'){ //Informação de portas fechadas
                 //TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
+                //(o simulador tem um bug, pois não avisa quando a porta está fechada)
                 
                 if(DEBUG) printf("[Comunicacao] Portas fechadas.\n");
             } else if (is_char_botao_andar(c[0])){ //Botão pressionado
@@ -52,7 +54,7 @@ void task_comunicacao(void const *arg){
             }
 		}
 		//
-		//Envia pela UART a próxima string que exista na Mail Queue de envio
+		//Envia para a UART a próxima string que exista na Mail Queue de envio
 		//
         evt = osMailGet(qid_filaEnvioMensagens, 1);
 		if(evt.status == osEventMail){

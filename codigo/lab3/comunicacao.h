@@ -10,6 +10,10 @@
 #define CR 0xD
 #define LF 0xA
 
+//Ativa ou desativa mensagens de debug.
+//As mensagens de printf podem ser vistas na janela de "Terminal I/O" do IAR (View -> Terminal I/O). 
+//1: ativa o debug
+//0: desativa o debug
 #define DEBUG 0
 
 extern osTimerId timer_Tick;
