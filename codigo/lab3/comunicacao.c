@@ -5,7 +5,7 @@ osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);
 
 void task_comunicacao(void const *arg){
 	//Inicializa a UART
-        UART_init(115200);
+    UART_init(115200);
 	//Inicializa a Msg Queue de envio de mensagens
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), NULL);
 	
@@ -31,35 +31,35 @@ void task_comunicacao(void const *arg){
 					i++;
 				} while(i < 4 && UART_read(&c) > 0 && is_number(c)); //Verifica se o próximo caractere é um algarismo também (podem ter no máximo 4 algarismos em uma mensagem).
 				str_numero_recebido[i] = '\0'; //Termina a string.
-                                //Converte a string para int (esta variável agora indica qual é a posição do elevador)
+                //Converte a string para int (esta variável agora indica qual é a posição do elevador)
 				numero_recebido = atoi(str_numero_recebido); 
 				//TODO: avisar à tarefa ControleElevador sobre a posição atual
 			} //Não tem 'else' aqui, pois os próximos IFs devem ser testados sempre.
 			if(c == 'A'){ //Informação de portas abertas
 				//TODO: Avisar à tarefa de ControleElevador que as portas estão abertas
 			} else 
-			if (c == 'F'){ //Informação de portas fechadas
-				//TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
-			} else
-			if (is_char_botao_andar(c)){ //Botão pressionado
-				//TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
-                            
-                                //liga a luz do botão correspondente
-                                comunicacao_envia_comando_ligar_botao(c);
-			}
+                if (c == 'F'){ //Informação de portas fechadas
+                    //TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
+                } else
+                    if (is_char_botao_andar(c)){ //Botão pressionado
+                        //TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
+                        
+                        //liga a luz do botão correspondente
+                        comunicacao_envia_comando_ligar_botao(c);
+                    }
 		}
 		//
 		//Envia pela UART os caracteres que existem na Message Queue de envio
 		//
-                evt = osMailGet(qid_filaEnvioMensagens, 0);
+        evt = osMailGet(qid_filaEnvioMensagens, 0);
 		while(evt.status == osEventMail){
 			MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) evt.value.p; //Extrai os dados da mensagem
 			int i;
 			for(i = 0; i<strlen(msg->texto); i++){//Escreve a string na UART
 				UART_write(msg->texto[i]); //Escreve o caractere na UART
 			}
-                        UART_write(CR);//Escreve um caractere de fim de linha
-                        evt = osMailGet(qid_filaEnvioMensagens, 0); //Verifica se há mais mensagens na fila
+            UART_write(CR);//Escreve um caractere de fim de linha
+            evt = osMailGet(qid_filaEnvioMensagens, 0); //Verifica se há mais mensagens na fila
 		}
 	}
 }
@@ -71,7 +71,7 @@ int is_number(char c){
 	if(c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
 		return 1;
 	else
-		return 0;
+        return 0;
 }
 
 /**
@@ -126,7 +126,7 @@ void comunicacao_inicializa_elevador(){
 	//Adiciona o comando 'R' à Msg Queue
 	MsgFilaEnvio_t msg;
 	msg.texto[0] = 'R';
-        msg.texto[1] = '\0';
+    msg.texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
@@ -139,18 +139,18 @@ void comunicacao_inicializa_elevador(){
 *	direcao <  0 Para requisicao de descida
 */
 void comunicacao_envia_requisicao_atendida(int andar, int direcao){
-        //Adiciona os comandos de desligar luz dos botões à Msg Queue
-        //Desliga o botão interno
+    //Adiciona os comandos de desligar luz dos botões à Msg Queue
+    //Desliga o botão interno
 	MsgFilaEnvio_t msg_interno;
 	msg_interno.texto[0] = 'D';
-        msg_interno.texto[1] = get_char_botao_interno(andar);
-        msg_interno.texto[2] = '\0';
+    msg_interno.texto[1] = get_char_botao_interno(andar);
+    msg_interno.texto[2] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg_interno);
-        //Desliga o botão externo
-        MsgFilaEnvio_t msg_externo;
+    //Desliga o botão externo
+    MsgFilaEnvio_t msg_externo;
 	msg_externo.texto[0] = 'D';
-        msg_externo.texto[1] = get_char_botao_externo(andar, direcao);
-        msg_externo.texto[2] = '\0';
+    msg_externo.texto[1] = get_char_botao_externo(andar, direcao);
+    msg_externo.texto[2] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg_externo);
 }
 
@@ -158,11 +158,11 @@ void comunicacao_envia_requisicao_atendida(int andar, int direcao){
 * Envia comando para ligar a luz do botão especificado
 */
 void comunicacao_envia_comando_ligar_botao(char botao){
-        //Adiciona o comando à Msg Queue
+    //Adiciona o comando à Msg Queue
 	MsgFilaEnvio_t msg;
-        msg.texto[0] = 'L';
+    msg.texto[0] = 'L';
 	msg.texto[1] = botao;
-        msg.texto[2] = '\0';
+    msg.texto[2] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
@@ -175,17 +175,17 @@ void comunicacao_envia_comando_ligar_botao(char botao){
 */
 void comunicacao_envia_comando_movimento(int direcao){
 	char comando;
-        if(direcao > 0)
-            comando = 's';
-        else if(direcao < 0)
-            comando = 'd';
-        else
-            comando = 'p';
-        
-        //Adiciona o comando à Msg Queue
+    if(direcao > 0)
+        comando = 's';
+    else if(direcao < 0)
+        comando = 'd';
+    else
+        comando = 'p';
+    
+    //Adiciona o comando à Msg Queue
 	MsgFilaEnvio_t msg;
 	msg.texto[0] = comando;
-        msg.texto[1] = '\0';
+    msg.texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
@@ -196,16 +196,16 @@ void comunicacao_envia_comando_movimento(int direcao){
 *       direcao <  0 para fechamento
 */
 void comunicacao_envia_comando_portas(int direcao){
-        char comando;
-        if(direcao >=0)
-            comando = 'a';
-        else
-            comando = 'f';
-        
-        //Adiciona o comando à Msg Queue
+    char comando;
+    if(direcao >=0)
+        comando = 'a';
+    else
+        comando = 'f';
+    
+    //Adiciona o comando à Msg Queue
 	MsgFilaEnvio_t msg;
 	msg.texto[0] = comando;
-        msg.texto[1] = '\0';
+    msg.texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
@@ -216,7 +216,7 @@ void comunicacao_envia_consulta_andar(){
 	//Adiciona o comando à Msg Queue
 	MsgFilaEnvio_t msg;
 	msg.texto[0] = 'x';
-        msg.texto[1] = '\0';
+    msg.texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
