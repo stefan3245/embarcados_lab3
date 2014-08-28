@@ -1,10 +1,7 @@
 #include "comunicacao.h"
 
 void task_comunicacao(void const *arg){
-	char c; //Variável que contém cada caractere recebido.
-	char str_numero_recebido[10]; //Contém a string dos números recebidos
-	int numero_recebido; //Contém o número inteiro recebido
-	
+	char c[10]; //Variável que contém a string de cada comando recebido do simulador.
 	osEvent evt; //Variável usada para ler mensagens da Mail Queue.
 	
 	//A cada iteração, verifica se existem caracteres recebidos da UART, e interpreta os caracteres recebidos.
@@ -12,34 +9,46 @@ void task_comunicacao(void const *arg){
 	for(;;)
 	{
 		//
-		//Lê um caractere em espera na UART
+		//Lê um caractere em espera na UART (caso exista)
 		//
-		if(UART_read(&c) > 0){
-			if(is_number(c)){ //Informação de posicionamento do elevador
-				int i = 0;
-				//Verifica os próximos caracteres do buffer, para ver se há mais algarismos.
-				do{
-					str_numero_recebido[i] = c;
-					i++;
-				} while(i < 4 && UART_read(&c) > 0 && is_number(c)); //Verifica se o próximo caractere é um algarismo também (podem ter no máximo 4 algarismos em uma mensagem).
-				str_numero_recebido[i] = '\0'; //Termina a string.
-                //Converte a string para int (esta variável agora indica qual é a posição do elevador)
-				numero_recebido = atoi(str_numero_recebido); 
-				//TODO: avisar à tarefa ControleElevador sobre a posição atual
-			} //Não tem 'else' aqui, pois os próximos IFs devem ser testados sempre.
-            
-			if(c == 'A'){ //Informação de portas abertas
+		if(UART_read(&c[0]) > 0){
+            if(is_number(c[0])){
+                //Lê tudo até chegar no LF
+                //(Cada comando é terminado por CR LF)
+                int k = 1;
+                while(UART_read(&c[k]) > 0){ 
+                    if(c[k] == LF) break;
+                    k++;
+                }
+                c[k-1] = '\0'; //Substitui o CR por \0, dessa forma a string acaba antes dele.
+                
+                if(strlen(c) > 1){ //Caso a string do comando seja maior que 1, isso indica que é uma informação de posição do elevador
+                    //Converte a string para int
+                    int posicao = atoi(c); 
+                    //TODO: avisar à tarefa ControleElevador sobre a posição atual
+                    
+                    if(DEBUG) printf("[Comunicacao] Posicao %d.\n", posicao);
+                } else { //Informação de que chegou em um andar (só tem um algarismo)
+                    //Converte a string para int
+                    int andar = atoi(c);
+                    //TODO: Avisar à tarefa de ControleElevador que chegou em um andar
+                    
+                    if(DEBUG) printf("[Comunicacao] Chegou no andar %d.\n", andar);
+                }
+            } else if(c[0] == 'A'){ //Informação de portas abertas
 				//TODO: Avisar à tarefa de ControleElevador que as portas estão abertas
                 
-			} else if (c == 'F'){ //Informação de portas fechadas
+                if(DEBUG) printf("[Comunicacao] Portas abertas.\n");
+			} else if (c[0] == 'F'){ //Informação de portas fechadas
                 //TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
                 
-            } else if (is_char_botao_andar(c)){ //Botão pressionado
+                if(DEBUG) printf("[Comunicacao] Portas fechadas.\n");
+            } else if (is_char_botao_andar(c[0])){ //Botão pressionado
                 //TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
                 
                 //liga a luz do botão correspondente
-                comunicacao_envia_comando_ligar_botao(c);
-                if(DEBUG) printf("[Comunicacao] Enviando: %c\n", c);
+                comunicacao_envia_comando_ligar_botao(c[0]);
+                if(DEBUG) printf("[Comunicacao] Botao pressionado: %c\n", c[0]);
             }
 		}
 		//

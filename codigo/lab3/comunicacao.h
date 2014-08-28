@@ -8,6 +8,7 @@
 #include <stdlib.h> 
 
 #define CR 0xD
+#define LF 0xA
 
 #define DEBUG 0
 
