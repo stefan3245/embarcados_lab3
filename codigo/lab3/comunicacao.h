@@ -9,7 +9,7 @@
 
 #define CR 0xD
 
-#define DEBUG 1
+#define DEBUG 0
 
 extern osTimerId timer_Tick;
 void Tick_Handler(void const *arg);

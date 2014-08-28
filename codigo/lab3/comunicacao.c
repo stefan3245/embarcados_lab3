@@ -39,6 +39,7 @@ void task_comunicacao(void const *arg){
                 
                 //liga a luz do botão correspondente
                 comunicacao_envia_comando_ligar_botao(c);
+                if(DEBUG) printf("[Comunicacao] Enviando: %c\n", c);
             }
 		}
 		//
