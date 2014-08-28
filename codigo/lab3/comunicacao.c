@@ -5,7 +5,7 @@ void task_comunicacao(void const *arg){
 	char str_numero_recebido[10]; //Contém a string dos números recebidos
 	int numero_recebido; //Contém o número inteiro recebido
 	
-	osEvent evt; //Variável usada para ler mensagens da Msg Queue.
+	osEvent evt; //Variável usada para ler mensagens da Mail Queue.
 	
 	//A cada iteração, verifica se existem caracteres recebidos da UART, e interpreta os caracteres recebidos.
 	//Também, envia pela UART quaisquer mensagens que estejam na fila de espera.
@@ -27,21 +27,22 @@ void task_comunicacao(void const *arg){
 				numero_recebido = atoi(str_numero_recebido); 
 				//TODO: avisar à tarefa ControleElevador sobre a posição atual
 			} //Não tem 'else' aqui, pois os próximos IFs devem ser testados sempre.
+            
 			if(c == 'A'){ //Informação de portas abertas
 				//TODO: Avisar à tarefa de ControleElevador que as portas estão abertas
-			} else 
-                if (c == 'F'){ //Informação de portas fechadas
-                    //TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
-                } else
-                    if (is_char_botao_andar(c)){ //Botão pressionado
-                        //TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
-                        
-                        //liga a luz do botão correspondente
-                        comunicacao_envia_comando_ligar_botao(c);
-                    }
+                
+			} else if (c == 'F'){ //Informação de portas fechadas
+                //TODO: Avisar à tarefa de ControleElevador que as portas estão fechadas	
+                
+            } else if (is_char_botao_andar(c)){ //Botão pressionado
+                //TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
+                
+                //liga a luz do botão correspondente
+                comunicacao_envia_comando_ligar_botao(c);
+            }
 		}
 		//
-		//Envia pela UART a próxima string que exista na Message Queue de envio
+		//Envia pela UART a próxima string que exista na Mail Queue de envio
 		//
         evt = osMailGet(qid_filaEnvioMensagens, 1);
 		if(evt.status == osEventMail){
@@ -114,10 +115,10 @@ char get_char_botao_interno(int andar){
 * Envia comando de inicialização do elevador (andar 0, portas abertas)
 */
 void comunicacao_inicializa_elevador(){
-	//Adiciona o comando 'R' à Msg Queue
-	MsgFilaEnvio_t msg;
-	msg.texto[0] = 'R';
-    msg.texto[1] = '\0';
+	//Adiciona o comando 'R' à Mail Queue
+	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
+	msg->texto[0] = 'R';
+    msg->texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
@@ -130,26 +131,26 @@ void comunicacao_inicializa_elevador(){
 *	direcao <  0 Para requisicao de descida
 */
 void comunicacao_envia_requisicao_atendida(int andar, int direcao){
-    //Adiciona os comandos de desligar luz dos botões à Msg Queue
+    //Adiciona os comandos de desligar luz dos botões à Mail Queue
     //Desliga o botão interno
-	MsgFilaEnvio_t msg_interno;
-	msg_interno.texto[0] = 'D';
-    msg_interno.texto[1] = get_char_botao_interno(andar);
-    msg_interno.texto[2] = '\0';
-	osMailPut(qid_filaEnvioMensagens, (void*) &msg_interno);
+	MsgFilaEnvio_t* msg_interno = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
+	msg_interno->texto[0] = 'D';
+    msg_interno->texto[1] = get_char_botao_interno(andar);
+    msg_interno->texto[2] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) msg_interno);
     //Desliga o botão externo
-    MsgFilaEnvio_t msg_externo;
-	msg_externo.texto[0] = 'D';
-    msg_externo.texto[1] = get_char_botao_externo(andar, direcao);
-    msg_externo.texto[2] = '\0';
-	osMailPut(qid_filaEnvioMensagens, (void*) &msg_externo);
+    MsgFilaEnvio_t* msg_externo = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
+	msg_externo->texto[0] = 'D';
+    msg_externo->texto[1] = get_char_botao_externo(andar, direcao);
+    msg_externo->texto[2] = '\0';
+	osMailPut(qid_filaEnvioMensagens, (void*) msg_externo);
 }
 
 /**
 * Envia comando para ligar a luz do botão especificado
 */
 void comunicacao_envia_comando_ligar_botao(char botao){
-    //Adiciona o comando à Msg Queue
+    //Adiciona o comando à Mail Queue
 	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
     msg->texto[0] = 'L';
 	msg->texto[1] = botao;
@@ -173,10 +174,10 @@ void comunicacao_envia_comando_movimento(int direcao){
     else
         comando = 'p';
     
-    //Adiciona o comando à Msg Queue
-	MsgFilaEnvio_t msg;
-	msg.texto[0] = comando;
-    msg.texto[1] = '\0';
+    //Adiciona o comando à Mail Queue
+	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
+	msg->texto[0] = comando;
+    msg->texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
@@ -193,10 +194,10 @@ void comunicacao_envia_comando_portas(int direcao){
     else
         comando = 'f';
     
-    //Adiciona o comando à Msg Queue
-	MsgFilaEnvio_t msg;
-	msg.texto[0] = comando;
-    msg.texto[1] = '\0';
+    //Adiciona o comando à Mail Queue
+	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
+	msg->texto[0] = comando;
+    msg->texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 
@@ -204,10 +205,10 @@ void comunicacao_envia_comando_portas(int direcao){
 * Envia uma requisição para saber qual é a posição atual do elevador.
 */
 void comunicacao_envia_consulta_andar(){
-	//Adiciona o comando à Msg Queue
-	MsgFilaEnvio_t msg;
-	msg.texto[0] = 'x';
-    msg.texto[1] = '\0';
+	//Adiciona o comando à Mail Queue
+	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
+	msg->texto[0] = 'x';
+    msg->texto[1] = '\0';
 	osMailPut(qid_filaEnvioMensagens, (void*) &msg);
 }
 

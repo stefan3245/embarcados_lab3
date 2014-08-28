@@ -17,19 +17,15 @@ int main()
     SystemCoreClockUpdate();
     //Inicializa a UART
     UART_init(115200);
-    printf("Oi\n");
+    printf("Inicializando...\n");
     //Inicializa as Threads
     tid_Comunicacao = osThreadCreate(osThread(task_comunicacao), NULL);
-     if (tid_Comunicacao == NULL) { // handle thread creation
-        // Failed to create a thread
-         printf("Erro\n");
+     if (tid_Comunicacao == NULL) {
+         printf("Erro ao criar Thread de Comunicacao!\n");
     }
-    //Inicializa a Msg Queue de envio de mensagens
+    //Inicializa a Mail Queue de envio de mensagens (Tarefa de Comunicacao)
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), tid_Comunicacao);
-    osDelay(1000);
-    comunicacao_envia_comando_ligar_botao('a');
-    //TODO: A função main deve virar uma thread. Isso é feito chamando-se diretamente a função da task (sem usar osThreadCreate)
-    for(;;){
-        osDelay(2000);
-    }
+    //comunicacao_envia_comando_ligar_botao('a'); //Testa a funcionalidade de envio de mensagens
+    //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (isso foi testado com sucesso).
+    return 0;
 }
