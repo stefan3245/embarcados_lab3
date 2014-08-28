@@ -9,6 +9,9 @@
 
 #define CR 0xD
 
+extern osTimerId timer_Tick;
+void Tick_Handler(void const *arg);
+
 extern osMailQId qid_filaEnvioMensagens;
 
 typedef struct {  // Estrutura de dados da Msg Queue de envio

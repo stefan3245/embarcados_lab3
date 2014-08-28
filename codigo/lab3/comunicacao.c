@@ -1,12 +1,7 @@
 #include "comunicacao.h"
 
-osMailQId qid_filaEnvioMensagens;
-osMailQDef(filaEnvioMensagens, 128, MsgFilaEnvio_t);
-
 void task_comunicacao(void const *arg){
-	//Inicializa a Msg Queue de envio de mensagens
-	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), osThreadGetId());
-	
+    UART_write('k');
 	char c; //Variável que contém cada caractere recebido.
 	char str_numero_recebido[10]; //Contém a string dos números recebidos
 	int numero_recebido; //Contém o número inteiro recebido
