@@ -1,4 +1,3 @@
-﻿
 #ifndef COMUNICACAO_H
 #define COMUNICACAO_H
 

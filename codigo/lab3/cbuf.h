@@ -1,4 +1,4 @@
-﻿#ifndef _cbuf_
+#ifndef _cbuf_
 #define _cbuf_
 
 //

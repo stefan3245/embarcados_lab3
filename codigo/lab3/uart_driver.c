@@ -1,4 +1,4 @@
-﻿#include "LPC17xx.h"
+#include "LPC17xx.h"
 #include "lpc17xx_clkpwr.h"
 #include "lpc17xx_pinsel.h"
 #include "mcu_regs.h"

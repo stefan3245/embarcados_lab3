@@ -1,4 +1,4 @@
-﻿#ifndef _UART_DRIVER_
+#ifndef _UART_DRIVER_
 #define _UART_DRIVER_
  
 #include "lpc17xx.h"

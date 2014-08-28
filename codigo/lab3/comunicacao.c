@@ -1,4 +1,3 @@
-﻿
 #include "comunicacao.h"
 
 osMailQId qid_filaEnvioMensagens;

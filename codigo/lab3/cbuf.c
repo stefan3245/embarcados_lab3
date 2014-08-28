@@ -1,4 +1,4 @@
-﻿#include "cbuf.h"
+#include "cbuf.h"
 
 //Inicializa o buffer
 void cbuf_init(struct cbuf_s* cbuf, char* data, int size){
