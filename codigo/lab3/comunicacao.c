@@ -7,7 +7,7 @@ void task_comunicacao(void const *arg){
 	//Inicializa a UART
     UART_init(115200);
 	//Inicializa a Msg Queue de envio de mensagens
-	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), NULL);
+	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), osThreadGetId());
 	
 	char c; //Variável que contém cada caractere recebido.
 	char str_numero_recebido[10]; //Contém a string dos números recebidos
@@ -20,9 +20,9 @@ void task_comunicacao(void const *arg){
 	for(;;)
 	{
 		//
-		//Lê os caracteres em espera na UART
+		//Lê um caractere em espera na UART
 		//
-		while(UART_read(&c) > 0){
+		if(UART_read(&c) > 0){
 			if(is_number(c)){ //Informação de posicionamento do elevador
 				int i = 0;
 				//Verifica os próximos caracteres do buffer, para ver se há mais algarismos.
@@ -49,17 +49,16 @@ void task_comunicacao(void const *arg){
                     }
 		}
 		//
-		//Envia pela UART os caracteres que existem na Message Queue de envio
+		//Envia pela UART a próxima string que exista na Message Queue de envio
 		//
-        evt = osMailGet(qid_filaEnvioMensagens, 0);
-		while(evt.status == osEventMail){
+        evt = osMailGet(qid_filaEnvioMensagens, 1);
+		if(evt.status == osEventMail){
 			MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) evt.value.p; //Extrai os dados da mensagem
 			int i;
 			for(i = 0; i<strlen(msg->texto); i++){//Escreve a string na UART
 				UART_write(msg->texto[i]); //Escreve o caractere na UART
 			}
             UART_write(CR);//Escreve um caractere de fim de linha
-            evt = osMailGet(qid_filaEnvioMensagens, 0); //Verifica se há mais mensagens na fila
 		}
 	}
 }
