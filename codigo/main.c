@@ -28,17 +28,22 @@ int main()
     }
     //Inicializa a Mail Queue de envio de mensagens (Tarefa de Comunicacao)
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), tid_Comunicacao);
+    //Inicializa o kernel
+    osKernelStart();
     //Inicializa o elevador na posicao inicial
     comunicacao_envia_comando_inicializa_elevador();
-//    //Testes
-//    comunicacao_envia_comando_movimento(1);
-//    while(1){
-//        osDelay(1000);
-//        comunicacao_envia_consulta_andar();
-//    }
+    //
+    //Testes (remover quando for utilizar o sistema em produção)
+    //
+    osDelay(2000);
+    comunicacao_envia_comando_portas(-1);
+    osDelay(5000);
+    comunicacao_envia_comando_movimento(1);
+    while(1){
+        osDelay(1000);
+        comunicacao_envia_consulta_andar();
+    }
     
-    osKernelStart();
-
     //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (fato comprovado na prática).
     return 0;
 }

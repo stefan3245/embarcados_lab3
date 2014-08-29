@@ -17,7 +17,7 @@
 * 1: ativa o debug
 * 0: desativa o debug
 */
-#define DEBUG 0
+#define DEBUG 1
 
 //Timer de ticks do sistema (é necessário colocar isso no .h, senão não compila)
 //extern osTimerId timer_Tick;
@@ -97,8 +97,8 @@ void comunicacao_envia_comando_movimento(int direcao);
 void comunicacao_envia_comando_portas(int direcao);
 
 /**
-* Envia uma requisição de qual andar o elevador está no momento.
+* Envia uma requisição de qual posicao o elevador está no momento.
 */
-void comunicacao_envia_consulta_andar();
+void comunicacao_envia_consulta_posicao();
 
 #endif
