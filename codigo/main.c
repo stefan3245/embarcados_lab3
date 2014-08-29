@@ -37,11 +37,11 @@ int main()
     //
     osDelay(2000);
     comunicacao_envia_comando_portas(-1);
-    osDelay(5000);
+    osDelay(2000);
     comunicacao_envia_comando_movimento(1);
     while(1){
         osDelay(1000);
-        comunicacao_envia_consulta_andar();
+        comunicacao_envia_consulta_posicao();
     }
     
     //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (fato comprovado na prática).

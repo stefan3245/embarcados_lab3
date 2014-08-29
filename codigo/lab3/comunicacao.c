@@ -223,7 +223,7 @@ void comunicacao_envia_comando_portas(int direcao){
 /**
 * Envia uma requisição para saber qual é a posição atual do elevador.
 */
-void comunicacao_envia_consulta_andar(){
+void comunicacao_envia_consulta_posicao(){
 	//Adiciona o comando à Mail Queue
 	MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) osMailAlloc(qid_filaEnvioMensagens, 0);
 	msg->texto[0] = 'x';
