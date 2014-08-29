@@ -20,8 +20,8 @@
 #define DEBUG 0
 
 //Timer de ticks do sistema (é necessário colocar isso no .h, senão não compila)
-extern osTimerId timer_Tick;
-void Tick_Handler(void const *arg);
+//extern osTimerId timer_Tick;
+//void Tick_Handler(void const *arg);
 
 //Fila de envio de mensagens
 extern osMailQId qid_filaEnvioMensagens;

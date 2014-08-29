@@ -4,8 +4,8 @@
 #include "systick_clock.h"
 
 //Definição do timer de ticks do sistema
-osTimerId timer_Tick;
-osTimerDef(Tick, Tick_Handler);
+//osTimerId timer_Tick;
+//osTimerDef(Tick, Tick_Handler);
 
 //Defifições de Threads
 osThreadId tid_Comunicacao;
@@ -37,6 +37,8 @@ int main()
 //        comunicacao_envia_consulta_andar();
 //    }
     
+    osKernelStart();
+
     //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (fato comprovado na prática).
     return 0;
 }

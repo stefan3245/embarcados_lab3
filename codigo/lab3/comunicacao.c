@@ -52,10 +52,14 @@ void task_comunicacao(void const *arg){
                 comunicacao_envia_comando_ligar_botao(c[0]);
                 if(DEBUG) printf("[Comunicacao] Botao pressionado: %c\n", c[0]);
             }
+            //Cede a execução para outras Threads
+            //TODO: verificar se essa é a melhor maneira de coordenar as threads
+            osThreadYield();
 		}
 		//
 		//Envia para a UART a próxima string que esteja na Mail Queue
 		//
+        //TODO: verificar se o timeout de 1ms "osMailGet(qid_filaEnvioMensagens, 1)" não afeta a performance do sistema
         evt = osMailGet(qid_filaEnvioMensagens, 1);
 		if(evt.status == osEventMail){
 			MsgFilaEnvio_t* msg = (MsgFilaEnvio_t*) evt.value.p; //Extrai os dados da mensagem
@@ -65,6 +69,9 @@ void task_comunicacao(void const *arg){
 			}
             UART_write(CR);//Escreve um caractere de fim de linha
 		}
+        //Cede a execução para outras Threads
+        //TODO: verificar se essa é a melhor maneira de coordenar as threads
+        osThreadYield();
 	}
 }
 
