@@ -1,5 +1,9 @@
 #include "comunicacao.h"
 
+#include "enfileirador.h"
+
+extern osThreadId tid_Enfileirador;
+
 void task_comunicacao(void const *arg){
 	char c[10]; //Variável que contém a string de cada comando recebido do simulador.
 	osEvent evt; //Variável usada para ler mensagens da Mail Queue.
@@ -46,7 +50,42 @@ void task_comunicacao(void const *arg){
                 
                 if(DEBUG) printf("[Comunicacao] Portas fechadas.\n");
             } else if (is_char_botao_andar(c[0])){ //Botão pressionado
-                //TODO: Avisar à tarefa Enfileirador que recebeu uma requisição de botão de andar
+                int32_t temp_signal;
+                switch (c[0]) {
+                case 'a':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SOBE_T;
+                break;
+                case 'b':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCE_1;
+                break;
+                case 'c':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SOBE_1;
+                break;
+                case 'd':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCE_2;
+                break;
+                case 'e':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SOBE_2;
+                break;
+                case 'f':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCE_3;
+                break;
+                case 'g':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_T;
+                break;
+                case 'h':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_1;
+                break;
+                case 'i':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_2;
+                break;
+                case 'j':
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_3;
+                break;
+              default:
+                //TODO: tratar o erro
+              }
+              osSignalSet(tid_Enfileirador, temp_signal);
                 
                 //liga a luz do botão correspondente
                 comunicacao_envia_comando_ligar_botao(c[0]);

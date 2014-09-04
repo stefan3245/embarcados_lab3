@@ -1,4 +1,5 @@
 #include "lab3/comunicacao.h"
+#include "lab3/enfileirador.h"
 #include "cmsis_os.h"
 #include "mcu_regs.h"
 #include "systick_clock.h"
@@ -10,6 +11,8 @@
 //Defifições de Threads
 osThreadId tid_Comunicacao;
 osThreadDef(task_comunicacao, osPriorityNormal, 1, 0);
+osThreadId tid_Enfileirador;
+osThreadDef(task_enfileirador, osPriorityNormal, 1, 0);
 
 //Definições de Mail Queues
 osMailQId qid_filaEnvioMensagens;
