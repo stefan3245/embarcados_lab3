@@ -1903,6 +1903,24 @@
       <name>$PROJ_DIR$\lab3\comunicacao.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\lab3\controle_elevador.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\lab3\controle_elevador.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\lab3\enfileirador.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\lab3\enfileirador.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\lab3\linked_list.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\lab3\linked_list.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\lab3\uart_driver.c</name>
     </file>
     <file>
