@@ -8,6 +8,7 @@
 
 extern linked_list *requisicoes;
 extern osSemaphoreId requests_semaphore;
+extern osThreadId tid_Enfileirador;
 
 typedef enum {
   //S_INICIALIZANDO,
@@ -36,7 +37,6 @@ void task_controle_elevador(void const *arg) {
         if (evt.value.signals & SIGNAL_CONTROLE_REQUISICAO_FEITA) {
           osSemaphoreWait(requests_semaphore, osWaitForever);
           destino = list_get_requisicao(requisicoes, 0);
-          osSemaphoreRelease(requests_semaphore);
           if (destino->andar > andar) {
             curr_state = S_SUBINDO_PARADO;
             comunicacao_envia_comando_portas(-1);
@@ -44,8 +44,14 @@ void task_controle_elevador(void const *arg) {
             curr_state = S_DESCENDO_PARADO;
             comunicacao_envia_comando_portas(-1);
           } else {
-            //TODO: mandar requisição atendida
+            list_remove_value(&requisicoes, andar, INTERNO);
+            comunicacao_envia_requisicao_atendida(andar, 0);
+            list_remove_value(&requisicoes, andar, SUBIDA);
+            comunicacao_envia_requisicao_atendida(andar, 1);
+            list_remove_value(&requisicoes, andar, DESCIDA);
+            comunicacao_envia_requisicao_atendida(andar, -1);
           }
+          osSemaphoreRelease(requests_semaphore);
         }
       } else {
         //TODO: Tratar erros
@@ -93,10 +99,18 @@ void task_controle_elevador(void const *arg) {
                 curr_state = S_SUBINDO_PORTAS_ABERTAS;
                 comunicacao_envia_comando_portas(1);
                 andar = aux;
-                //TODO: Emite parou no andar
+                list_remove_value(&requisicoes, andar, INTERNO);
+                comunicacao_envia_requisicao_atendida(andar, 0);
+                list_remove_value(&requisicoes, andar, SUBIDA);
+                comunicacao_envia_requisicao_atendida(andar, 1);
+                if (aux == list_maior_descida(requisicoes)) {
+                  list_remove_value(&requisicoes, andar, DESCIDA);
+                  comunicacao_envia_requisicao_atendida(andar, -1);
+                }
               }
-        osSemaphoreRelease(requests_semaphore);
       }
+      osSemaphoreRelease(requests_semaphore);
+      break;
       
     case S_SUBINDO_PORTAS_ABERTAS:
       osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 5000); //Espera 5 segundos
@@ -113,7 +127,23 @@ void task_controle_elevador(void const *arg) {
           curr_state = S_DESCENDO_PARADO;
           comunicacao_envia_comando_portas(-1);
         } else {
-          //TODO: mandar requisição atendida
+          switch(andar) {
+          case 0:
+            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_T);
+            break;
+          case 1:
+            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_1);
+            break;
+          case 2:
+            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_2);
+            break;
+          case 3:
+            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_3);
+            break;
+          default:
+            //Tratar erro
+            break;
+          }
         }
       }
       break;
@@ -159,7 +189,14 @@ void task_controle_elevador(void const *arg) {
                 curr_state = S_DESCENDO_PORTAS_ABERTAS;
                 comunicacao_envia_comando_portas(1);
                 andar = aux;
-                //TODO: Emite parou no andar
+                list_remove_value(&requisicoes, andar, INTERNO);
+                comunicacao_envia_requisicao_atendida(andar, 0);
+                list_remove_value(&requisicoes, andar, DESCIDA);
+                comunicacao_envia_requisicao_atendida(andar, -1);
+                if (aux == list_menor_subida(requisicoes)) {
+                  list_remove_value(&requisicoes, andar, DESCIDA);
+                  comunicacao_envia_requisicao_atendida(andar, 1);
+                }
               }
         osSemaphoreRelease(requests_semaphore);
       }
@@ -179,7 +216,12 @@ void task_controle_elevador(void const *arg) {
           curr_state = S_DESCENDO_PARADO;
           comunicacao_envia_comando_portas(-1);
         } else {
-          //TODO: mandar requisição atendida
+          list_remove_value(&requisicoes, andar, INTERNO);
+          comunicacao_envia_requisicao_atendida(andar, 0);
+          list_remove_value(&requisicoes, andar, SUBIDA);
+          comunicacao_envia_requisicao_atendida(andar, 1);
+          list_remove_value(&requisicoes, andar, DESCIDA);
+          comunicacao_envia_requisicao_atendida(andar, -1);
         }
       }
       break;
