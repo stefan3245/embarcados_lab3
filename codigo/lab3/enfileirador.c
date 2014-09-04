@@ -16,26 +16,30 @@ void task_enfileirador(void const *arg) {
   while(1) {
     evt = osSignalWait(0, osWaitForever);
     if (evt.status == osEventSignal) {
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_T)
-        list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_T);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_1)
-        list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_1);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_2)
-        list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_2);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_3)
-        list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_3);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_DESCE_3)
-        list_append(&requisicoes, REQUISICAO_BOTAO_DESCE_3);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_DESCE_2)
-        list_append(&requisicoes, REQUISICAO_BOTAO_DESCE_2);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_DESCE_1)
-        list_append(&requisicoes, REQUISICAO_BOTAO_DESCE_1);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_SOBE_T)
-        list_append(&requisicoes, REQUISICAO_BOTAO_SOBE_T);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_SOBE_1)
-        list_append(&requisicoes, REQUISICAO_BOTAO_SOBE_1);
-      if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_SOBE_2)
-        list_append(&requisicoes, REQUISICAO_BOTAO_SOBE_2);
+      int32_t available = osSemaphoreWait(requests_semaphore, osWaitForever);
+      if (available > 0) {
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_T)
+          list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_T);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_1)
+          list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_1);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_2)
+          list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_2);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_3)
+          list_append(&requisicoes, REQUISICAO_BOTAO_INTERNO_3);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_DESCE_3)
+          list_append(&requisicoes, REQUISICAO_BOTAO_DESCE_3);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_DESCE_2)
+          list_append(&requisicoes, REQUISICAO_BOTAO_DESCE_2);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_DESCE_1)
+          list_append(&requisicoes, REQUISICAO_BOTAO_DESCE_1);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_SOBE_T)
+          list_append(&requisicoes, REQUISICAO_BOTAO_SOBE_T);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_SOBE_1)
+          list_append(&requisicoes, REQUISICAO_BOTAO_SOBE_1);
+        if (evt.value.signals | SIGNAL_ENFILEIRADOR_BOTAO_SOBE_2)
+          list_append(&requisicoes, REQUISICAO_BOTAO_SOBE_2);
+      } else {
+        //TODO: tratar erros e/ou problemas de temporização
     } else {
       //TODO: tratar erros
     }
