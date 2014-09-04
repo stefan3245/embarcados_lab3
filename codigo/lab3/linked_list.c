@@ -54,3 +54,12 @@ int list_remove(linked_list **list, int pos) {
   }
   return -1;
 }
+
+int list_has_value(linked_list *list, int value) {
+  linked_list *aux = list;
+  while (aux != NULL) {
+    if (aux->value == value) return 1;
+    aux = aux->next;
+  }
+  return 0;
+}

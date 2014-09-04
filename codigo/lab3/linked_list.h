@@ -10,5 +10,6 @@ int list_size(linked_list *list);
 int list_get_value(linked_list *list, int pos);
 void list_append(linked_list **list, int value);
 int list_remove(linked_list **list, int pos);
+int list_has_value(linked_list *list, int value);
 
 #endif //LINKED_LIST_H
