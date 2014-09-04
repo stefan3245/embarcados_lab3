@@ -7,8 +7,8 @@ typedef struct list_node {
 } linked_list;
 
 int list_size(linked_list *list);
-int get_value(linked_list *list, int pos);
-void append(linked_list **list, int value);
-int remove(linked_list **list, int pos);
+int list_get_value(linked_list *list, int pos);
+void list_append(linked_list **list, int value);
+int list_remove(linked_list **list, int pos);
 
 #endif //LINKED_LIST_H

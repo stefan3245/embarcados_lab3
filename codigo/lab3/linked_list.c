@@ -12,7 +12,7 @@ int list_size(linked_list *list) {
   return counter;
 }
 
-int get_value(linked_list *list, int pos) {
+int list_get_value(linked_list *list, int pos) {
   linked_list *aux = list;
   int counter = 0;
   while (aux != NULL) {
@@ -23,7 +23,7 @@ int get_value(linked_list *list, int pos) {
   return -1;
 }
 
-void append(linked_list **list, int value) {
+void list_append(linked_list **list, int value) {
   linked_list *new_node = (linked_list*)malloc(sizeof(linked_list));
   linked_list *aux = *list;
   if (aux == NULL) {
@@ -34,7 +34,7 @@ void append(linked_list **list, int value) {
   aux->next = new_node;
 }
 
-int remove(linked_list **list, int pos) {
+int list_remove(linked_list **list, int pos) {
   linked_list *aux = *list;
   if (aux == NULL) return -1;
   if (pos == 0) {
