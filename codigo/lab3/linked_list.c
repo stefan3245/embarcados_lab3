@@ -85,3 +85,23 @@ int list_has_value(linked_list *list, int andar, tipo_requisicao tipo) {
   }
   return 0;
 }
+
+int list_maior_descida(linked_list *list) {
+  linked_list *aux = list;
+  int ret = -1;
+  while (aux != NULL) {
+    if (aux->tipo == SUBIDA && aux->andar > ret) ret = aux->andar;
+    aux = aux->next;
+  }
+  return ret;
+}
+
+int list_menor_subida(linked_list *list) {
+  linked_list *aux = list;
+  int ret = 4;
+  while (aux != NULL) {
+    if (aux->tipo == DESCIDA && aux->andar < ret) ret = aux->andar;
+    aux = aux->next;
+  }
+  return ret;
+}

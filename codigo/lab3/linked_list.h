@@ -19,5 +19,7 @@ void list_append(linked_list **list, int andar, tipo_requisicao tipo);
 int list_remove(linked_list **list, int pos);
 int list_remove_value(linked_list **list, int andar, tipo_requisicao tipo);
 int list_has_value(linked_list *list, int andar, tipo_requisicao tipo);
+int list_maior_descida(linked_list *list);
+int list_menor_subida(linked_list *list);
 
 #endif //LINKED_LIST_H

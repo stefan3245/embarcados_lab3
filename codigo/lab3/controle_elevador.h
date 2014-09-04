@@ -10,7 +10,7 @@
 #define SIGNAL_CONTROLE_ANDAR_1 0x0010
 #define SIGNAL_CONTROLE_ANDAR_2 0x0020
 #define SIGNAL_CONTROLE_ANDAR_3 0x0040
-#define SIGNAL_CONTROLE_ANDAR_ANY 0x0078 //Soma dos quatro anteriores
+//#define SIGNAL_CONTROLE_ANDAR_ANY 0x0078 //Soma dos quatro anteriores
 
 #define SIGNAL_CONTROLE_TIME_DELAY 0x8000 //Sinal nunca é gerado, usado para fazer generic wait
 
