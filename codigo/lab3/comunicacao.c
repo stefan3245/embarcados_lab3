@@ -53,22 +53,22 @@ void task_comunicacao(void const *arg){
                 int32_t temp_signal;
                 switch (c[0]) {
                 case 'a':
-                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SOBE_T;
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SUBIDA_T;
                 break;
                 case 'b':
-                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCE_1;
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCIDA_1;
                 break;
                 case 'c':
-                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SOBE_1;
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SUBIDA_1;
                 break;
                 case 'd':
-                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCE_2;
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCIDA_2;
                 break;
                 case 'e':
-                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SOBE_2;
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_SUBIDA_2;
                 break;
                 case 'f':
-                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCE_3;
+                    temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_DESCIDA_3;
                 break;
                 case 'g':
                     temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_T;
@@ -83,6 +83,7 @@ void task_comunicacao(void const *arg){
                     temp_signal = SIGNAL_ENFILEIRADOR_BOTAO_INTERNO_3;
                 break;
               default:
+                break;
                 //TODO: tratar o erro
               }
               osSignalSet(tid_Enfileirador, temp_signal);

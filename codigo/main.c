@@ -1,5 +1,6 @@
 #include "lab3/comunicacao.h"
 #include "lab3/enfileirador.h"
+#include "lab3/controle_elevador.h"
 #include "cmsis_os.h"
 #include "mcu_regs.h"
 #include "systick_clock.h"
@@ -13,6 +14,8 @@ osThreadId tid_Comunicacao;
 osThreadDef(task_comunicacao, osPriorityNormal, 1, 0);
 osThreadId tid_Enfileirador;
 osThreadDef(task_enfileirador, osPriorityNormal, 1, 0);
+osThreadId tid_Controle;
+osThreadDef(task_controle_elevador, osPriorityNormal, 1, 0);
 
 //Definições de Mail Queues
 osMailQId qid_filaEnvioMensagens;
@@ -28,6 +31,14 @@ int main()
     tid_Comunicacao = osThreadCreate(osThread(task_comunicacao), NULL);
     if (tid_Comunicacao == NULL) {
          printf("Erro ao criar Thread de Comunicacao!\n");
+    }
+    tid_Enfileirador = osThreadCreate(osThread(task_enfileirador), NULL);
+    if (tid_Enfileirador == NULL) {
+         printf("Erro ao criar Thread de Enfileirador!\n");
+    }
+    tid_Controle = osThreadCreate(osThread(task_controle_elevador), NULL);
+    if (tid_Controle == NULL) {
+         printf("Erro ao criar Thread de Controle do elevador!\n");
     }
     //Inicializa a Mail Queue de envio de mensagens (Tarefa de Comunicacao)
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), tid_Comunicacao);
