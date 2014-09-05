@@ -20,14 +20,13 @@ void task_comunicacao(void const *arg){
     //
     if(UART_read(&c[0]) > 0) {
       if(is_number(c[0])){
-        //Lê tudo até chegar no LF
-        //(Cada comando é terminado por CR LF)
+        //Lê tudo até chegar no fim do buffer
         int k = 1;
         while(UART_read(&c[k]) > 0){ 
-          if(c[k] == LF) break;
           k++;
         }
-        c[k-1] = '\0'; //Substitui o CR por \0, dessa forma a string acaba antes dele.
+
+        c[k] = '\0'; //Termina a string.
         
         if(strlen(c) > 1){ //Caso a string do comando seja maior que 1, isso indica que é uma informação de posição do elevador
           //Converte a string para int
