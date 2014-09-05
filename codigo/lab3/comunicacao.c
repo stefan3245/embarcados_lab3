@@ -67,10 +67,8 @@ void task_comunicacao(void const *arg){
         }
         
         //Se houver mensagem "adicional", considera-a para que possa ser processada no resto do loop
-        if(aditional_message != '\0'){
-            c[0]=aditional_message;
-            aditional_message = '\0';
-        }
+        //(Se não existir mensagem adicional, c[0] será '\0', o que não é tem o significado de nenhuma mensagem)
+        c[0]=aditional_message;
       } 
       
       if(c[0] == 'A'){ //Informação de portas abertas
