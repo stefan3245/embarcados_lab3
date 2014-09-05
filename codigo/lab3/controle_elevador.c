@@ -46,7 +46,7 @@ void task_controle_elevador(void const *arg) {
             comunicacao_envia_comando_portas(-1);
           } else {
             list_remove_value(&requisicoes, andar, INTERNO);
-            comunicacao_envia_requisicao_atendida(andar, 0);
+            //comunicacao_envia_requisicao_atendida(andar, 0);
             list_remove_value(&requisicoes, andar, SUBIDA);
             comunicacao_envia_requisicao_atendida(andar, 1);
             list_remove_value(&requisicoes, andar, DESCIDA);
@@ -96,7 +96,7 @@ void task_controle_elevador(void const *arg) {
         osSemaphoreWait(requests_semaphore, osWaitForever);
         if ((list_has_value(requisicoes, aux, INTERNO)) ||
             (list_has_value(requisicoes, aux, SUBIDA)) ||
-              (aux == list_maior_descida(requisicoes)) ) {
+              (aux == list_maior_descida(requisicoes) && list_get_requisicao(requisicoes, 0)->tipo == DESCIDA) ) {
                 comunicacao_envia_comando_movimento(0);
                 osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 500); //Espera 500ms
                 osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
@@ -104,10 +104,10 @@ void task_controle_elevador(void const *arg) {
                 comunicacao_envia_comando_portas(1);
                 andar = aux;
                 list_remove_value(&requisicoes, andar, INTERNO);
-                comunicacao_envia_requisicao_atendida(andar, 0);
+                //comunicacao_envia_requisicao_atendida(andar, 0);
                 list_remove_value(&requisicoes, andar, SUBIDA);
                 comunicacao_envia_requisicao_atendida(andar, 1);
-                if (aux == list_maior_descida(requisicoes)) {
+                if (aux == list_maior_andar(requisicoes)) {
                   list_remove_value(&requisicoes, andar, DESCIDA);
                   comunicacao_envia_requisicao_atendida(andar, -1);
                 }
@@ -121,7 +121,6 @@ void task_controle_elevador(void const *arg) {
       osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
       osSemaphoreWait(requests_semaphore, osWaitForever);
       destino = list_get_requisicao(requisicoes, 0);
-      osSemaphoreRelease(requests_semaphore);
       if (destino == NULL) {
         curr_state = S_OCIOSO;
       } else {
@@ -133,13 +132,16 @@ void task_controle_elevador(void const *arg) {
           comunicacao_envia_comando_portas(-1);
         } else {
           list_remove_value(&requisicoes, andar, INTERNO);
-          comunicacao_envia_requisicao_atendida(andar, 0);
+          //comunicacao_envia_requisicao_atendida(andar, 0);
           list_remove_value(&requisicoes, andar, SUBIDA);
           comunicacao_envia_requisicao_atendida(andar, 1);
-          list_remove_value(&requisicoes, andar, DESCIDA);
-          comunicacao_envia_requisicao_atendida(andar, -1);
+          if (andar == list_maior_andar(requisicoes)) {
+            list_remove_value(&requisicoes, andar, DESCIDA);
+            comunicacao_envia_requisicao_atendida(andar, -1);
+          }
         }
       }
+      osSemaphoreRelease(requests_semaphore);
       break;
       
     case S_DESCENDO_PARADO:
@@ -180,7 +182,7 @@ void task_controle_elevador(void const *arg) {
         osSemaphoreWait(requests_semaphore, osWaitForever);
         if ((list_has_value(requisicoes, aux, INTERNO)) ||
             (list_has_value(requisicoes, aux, DESCIDA)) ||
-              (aux == list_menor_subida(requisicoes)) ) {
+              (aux == list_menor_subida(requisicoes)) && list_get_requisicao(requisicoes, 0)->tipo == SUBIDA) {
                 comunicacao_envia_comando_movimento(0);
                 osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 500); //Espera 500ms
                 osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
@@ -188,11 +190,11 @@ void task_controle_elevador(void const *arg) {
                 comunicacao_envia_comando_portas(1);
                 andar = aux;
                 list_remove_value(&requisicoes, andar, INTERNO);
-                comunicacao_envia_requisicao_atendida(andar, 0);
+                //comunicacao_envia_requisicao_atendida(andar, 0);
                 list_remove_value(&requisicoes, andar, DESCIDA);
                 comunicacao_envia_requisicao_atendida(andar, -1);
-                if (aux == list_menor_subida(requisicoes)) {
-                  list_remove_value(&requisicoes, andar, DESCIDA);
+                if (aux == list_menor_andar(requisicoes)) {
+                  list_remove_value(&requisicoes, andar, SUBIDA);
                   comunicacao_envia_requisicao_atendida(andar, 1);
                 }
               }
@@ -204,7 +206,6 @@ void task_controle_elevador(void const *arg) {
       osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
       osSemaphoreWait(requests_semaphore, osWaitForever);
       destino = list_get_requisicao(requisicoes, 0);
-      osSemaphoreRelease(requests_semaphore);
       if (destino == NULL) {
         curr_state = S_OCIOSO;
       } else {
@@ -216,13 +217,16 @@ void task_controle_elevador(void const *arg) {
           comunicacao_envia_comando_portas(-1);
         } else {
           list_remove_value(&requisicoes, andar, INTERNO);
-          comunicacao_envia_requisicao_atendida(andar, 0);
-          list_remove_value(&requisicoes, andar, SUBIDA);
-          comunicacao_envia_requisicao_atendida(andar, 1);
+          //comunicacao_envia_requisicao_atendida(andar, 0);
           list_remove_value(&requisicoes, andar, DESCIDA);
-          comunicacao_envia_requisicao_atendida(andar, -1);
+          comunicacao_envia_requisicao_atendida(andar, 1);
+          if (andar == list_menor_andar(requisicoes)) {
+            list_remove_value(&requisicoes, andar, SUBIDA);
+            comunicacao_envia_requisicao_atendida(andar, 1);
+          }
         }
       }
+      osSemaphoreRelease(requests_semaphore);
       break;
       
     default:

@@ -17,7 +17,7 @@
 * 1: ativa o debug
 * 0: desativa o debug
 */
-#define DEBUG 1
+#define DEBUG 0
 
 //Timer de ticks do sistema (é necessário colocar isso no .h, senão não compila)
 //extern osTimerId timer_Tick;

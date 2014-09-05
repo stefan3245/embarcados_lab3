@@ -22,12 +22,14 @@ void task_comunicacao(void const *arg){
       if(is_number(c[0])){
         //Lê tudo até chegar no LF
         //(Cada comando é terminado por CR LF)
+        /*
         int k = 1;
         while(UART_read(&c[k]) > 0){ 
           if(c[k] == LF) break;
           k++;
         }
         c[k-1] = '\0'; //Substitui o CR por \0, dessa forma a string acaba antes dele.
+        */
         
         if(strlen(c) > 1){ //Caso a string do comando seja maior que 1, isso indica que é uma informação de posição do elevador
           //Converte a string para int
@@ -37,7 +39,7 @@ void task_comunicacao(void const *arg){
           if(DEBUG) printf("[Comunicacao] Posicao %d.\n", posicao);
         } else { //Informação de que chegou em um andar (só tem um algarismo)
           //Converte a string para int
-          int andar = atoi(c);
+          int andar = (int)(c[0] - '0');
           
           switch (andar) {
           case 0:

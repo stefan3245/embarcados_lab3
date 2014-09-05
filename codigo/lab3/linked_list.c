@@ -41,8 +41,10 @@ int list_remove(linked_list **list, int pos) {
   linked_list *aux = *list;
   if (aux == NULL) return -1;
   if (pos == 0) {
-    free(*list);
-    *list = NULL;
+    linked_list *temp = aux;
+    (*list) = aux->next;
+    free(temp);
+    return 0;
   }
   int counter = 0;
   while (aux->next != NULL) {
@@ -62,8 +64,10 @@ int list_remove_value(linked_list **list, int andar, tipo_requisicao tipo) {
   linked_list *aux = *list;
   if (aux == NULL) return -1;
   if (aux->andar == andar && aux->tipo == tipo) {
-    free(*list);
-    *list = NULL;
+    linked_list *temp = aux;
+    (*list) = aux->next;
+    free(temp);
+    return 0;
   }
   while (aux->next != NULL) {
     if (aux->next->andar == andar && aux->next->tipo == tipo) {
@@ -90,7 +94,7 @@ int list_maior_descida(linked_list *list) {
   linked_list *aux = list;
   int ret = -1;
   while (aux != NULL) {
-    if (aux->tipo == SUBIDA && aux->andar > ret) ret = aux->andar;
+    if (aux->tipo == DESCIDA && (aux->andar > ret)) ret = aux->andar;
     aux = aux->next;
   }
   return ret;
@@ -100,7 +104,27 @@ int list_menor_subida(linked_list *list) {
   linked_list *aux = list;
   int ret = 4;
   while (aux != NULL) {
-    if (aux->tipo == DESCIDA && aux->andar < ret) ret = aux->andar;
+    if (aux->tipo == SUBIDA && (aux->andar < ret)) ret = aux->andar;
+    aux = aux->next;
+  }
+  return ret;
+}
+
+int list_maior_andar(linked_list *list) {
+  linked_list *aux = list;
+  int ret = -1;
+  while (aux != NULL) {
+    if (aux->andar > ret) ret = aux->andar;
+    aux = aux->next;
+  }
+  return ret;
+}
+
+int list_menor_andar(linked_list *list) {
+  linked_list *aux = list;
+  int ret = 4;
+  while (aux != NULL) {
+    if (aux->andar < ret) ret = aux->andar;
     aux = aux->next;
   }
   return ret;

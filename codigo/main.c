@@ -44,6 +44,11 @@ int main()
 	qid_filaEnvioMensagens = osMailCreate(osMailQ(filaEnvioMensagens), tid_Comunicacao);
     //Inicializa o kernel
     osKernelStart();
+    //Desliga todas as luzes
+    for (int i = 0; i < 4; i++) {
+      comunicacao_envia_requisicao_atendida(i,-1);
+      comunicacao_envia_requisicao_atendida(i,1);
+    }
     //Inicializa o elevador na posicao inicial
     comunicacao_envia_comando_inicializa_elevador();
     //
