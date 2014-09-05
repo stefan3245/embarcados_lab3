@@ -182,7 +182,7 @@ void task_controle_elevador(void const *arg) {
         osSemaphoreWait(requests_semaphore, osWaitForever);
         if ((list_has_value(requisicoes, aux, INTERNO)) ||
             (list_has_value(requisicoes, aux, DESCIDA)) ||
-              (aux == list_menor_subida(requisicoes)) && list_get_requisicao(requisicoes, 0)->tipo == SUBIDA) {
+              (aux == list_menor_subida(requisicoes) && list_get_requisicao(requisicoes, 0)->tipo == SUBIDA) ) {
                 comunicacao_envia_comando_movimento(0);
                 osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 500); //Espera 500ms
                 osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
