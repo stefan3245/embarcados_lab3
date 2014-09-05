@@ -20,15 +20,19 @@ void task_comunicacao(void const *arg){
     //
     if(UART_read(&c[0]) > 0) {
       if(is_number(c[0])){
-        //Lê tudo até chegar no LF
-        //(Cada comando é terminado por CR LF)
+        char additional_message = '\0'; //Mensagem adicional (caractere alfabético)
+        //Lê tudo até chegar no fim do número
         /*
         int k = 1;
         while(UART_read(&c[k]) > 0){ 
-          if(c[k] == LF) break;
+            if(!is_number(c[k])) {
+                //Uma mensagem adicional ocorre quando um caractere extra (que não é número) é lido da UART.
+                additional_message = c[k];
+                break;
+            }
           k++;
         }
-        c[k-1] = '\0'; //Substitui o CR por \0, dessa forma a string acaba antes dele.
+        c[k] = '\0'; //Termina a string.
         */
         
         if(strlen(c) > 1){ //Caso a string do comando seja maior que 1, isso indica que é uma informação de posição do elevador
@@ -63,7 +67,13 @@ void task_comunicacao(void const *arg){
           if(DEBUG) printf("[Comunicacao] Chegou no andar %d.\n", andar);
           //if(DEBUG) printf("[Comunicacao] Chegou no andar %s.\n", c);
         }
-      } else if(c[0] == 'A'){ //Informação de portas abertas
+        
+        //Se houver mensagem "adicional", considera-a para que possa ser processada no resto do loop
+        //(Se não existir mensagem adicional, c[0] será '\0', o que não é tem o significado de nenhuma mensagem)
+        c[0]=additional_message;
+      } 
+      
+      if(c[0] == 'A'){ //Informação de portas abertas
         
         osSignalSet(tid_Controle, SIGNAL_CONTROLE_PORTAS_ABERTAS);
         //(NOTE: o simulador tem um bug, pois não avisa quando a porta está aberta)
@@ -142,7 +152,7 @@ void task_comunicacao(void const *arg){
 * Testa se o caractere é um número
 */
 int is_number(char c){
-  if(c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
+  if(c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c =='.')
     return 1;
   else
     return 0;
