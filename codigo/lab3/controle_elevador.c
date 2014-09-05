@@ -127,23 +127,12 @@ void task_controle_elevador(void const *arg) {
           curr_state = S_DESCENDO_PARADO;
           comunicacao_envia_comando_portas(-1);
         } else {
-          switch(andar) {
-          case 0:
-            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_T);
-            break;
-          case 1:
-            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_1);
-            break;
-          case 2:
-            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_2);
-            break;
-          case 3:
-            osSignalSet(tid_Enfileirador, SIGNAL_ENFILEIRADOR_PAROU_ANDAR_3);
-            break;
-          default:
-            //Tratar erro
-            break;
-          }
+          list_remove_value(&requisicoes, andar, INTERNO);
+          comunicacao_envia_requisicao_atendida(andar, 0);
+          list_remove_value(&requisicoes, andar, SUBIDA);
+          comunicacao_envia_requisicao_atendida(andar, 1);
+          list_remove_value(&requisicoes, andar, DESCIDA);
+          comunicacao_envia_requisicao_atendida(andar, -1);
         }
       }
       break;
