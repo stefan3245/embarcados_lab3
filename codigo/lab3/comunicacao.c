@@ -20,13 +20,13 @@ void task_comunicacao(void const *arg){
     //
     if(UART_read(&c[0]) > 0) {
       if(is_number(c[0])){
-        char aditional_message = '\0'; //Mensagem adicional (caractere alfabético)
+        char additional_message = '\0'; //Mensagem adicional (caractere alfabético)
         //Lê tudo até chegar no fim do número
         int k = 1;
         while(UART_read(&c[k]) > 0){ 
             if(!is_number(c[k])) {
                 //Uma mensagem adicional ocorre quando um caractere extra (que não é número) é lido da UART.
-                aditional_message = c[k];
+                additional_message = c[k];
                 break;
             }
           k++;
@@ -68,7 +68,7 @@ void task_comunicacao(void const *arg){
         
         //Se houver mensagem "adicional", considera-a para que possa ser processada no resto do loop
         //(Se não existir mensagem adicional, c[0] será '\0', o que não é tem o significado de nenhuma mensagem)
-        c[0]=aditional_message;
+        c[0]=additional_message;
       } 
       
       if(c[0] == 'A'){ //Informação de portas abertas
