@@ -49,6 +49,7 @@ int main()
     //
     //Testes (remover quando for utilizar o sistema em produção)
     //
+    /*
     osDelay(2000);
     comunicacao_envia_comando_portas(-1);
     osDelay(2000);
@@ -57,6 +58,7 @@ int main()
         osDelay(1000);
         comunicacao_envia_consulta_posicao();
     }
+    */
     
     //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (fato comprovado na prática).
     return 0;

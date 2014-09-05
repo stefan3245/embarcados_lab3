@@ -35,6 +35,7 @@ void task_controle_elevador(void const *arg) {
       evt = osSignalWait(0, osWaitForever);
       if (evt.status == osEventSignal) {
         if (evt.value.signals & SIGNAL_CONTROLE_REQUISICAO_FEITA) {
+          osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_REQUISICAO_FEITA);
           osSemaphoreWait(requests_semaphore, osWaitForever);
           destino = list_get_requisicao(requisicoes, 0);
           if (destino->andar > andar) {
@@ -61,8 +62,10 @@ void task_controle_elevador(void const *arg) {
     case S_SUBINDO_PARADO:
       evt = osSignalWait(SIGNAL_CONTROLE_PORTAS_FECHADAS, osWaitForever);
       if (evt.status == osEventSignal) {
+        osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_PORTAS_FECHADAS);
         curr_state = S_SUBINDO_SUBINDO;
         osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 500); //Espera 500ms
+        osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
         comunicacao_envia_comando_movimento(1);
       } else {
         //TODO: tratar erros
@@ -96,6 +99,7 @@ void task_controle_elevador(void const *arg) {
               (aux == list_maior_descida(requisicoes)) ) {
                 comunicacao_envia_comando_movimento(0);
                 osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 500); //Espera 500ms
+                osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
                 curr_state = S_SUBINDO_PORTAS_ABERTAS;
                 comunicacao_envia_comando_portas(1);
                 andar = aux;
@@ -114,6 +118,7 @@ void task_controle_elevador(void const *arg) {
       
     case S_SUBINDO_PORTAS_ABERTAS:
       osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 5000); //Espera 5 segundos
+      osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
       osSemaphoreWait(requests_semaphore, osWaitForever);
       destino = list_get_requisicao(requisicoes, 0);
       osSemaphoreRelease(requests_semaphore);
@@ -139,9 +144,11 @@ void task_controle_elevador(void const *arg) {
       
     case S_DESCENDO_PARADO:
       evt = osSignalWait(SIGNAL_CONTROLE_PORTAS_FECHADAS, osWaitForever);
+      osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_PORTAS_FECHADAS);
       if (evt.status == osEventSignal) {
         curr_state = S_DESCENDO_DESCENDO;
         osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 500); //Espera 500ms
+        osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
         comunicacao_envia_comando_movimento(-1);
       } else {
         //TODO: tratar erros
@@ -151,6 +158,7 @@ void task_controle_elevador(void const *arg) {
     case S_DESCENDO_DESCENDO:
       evt = osSignalWait(0, osWaitForever);
       if (evt.status == osEventSignal) {
+        osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_ANDAR_ALL);
         int aux = -1;
         switch (evt.value.signals) {
         case SIGNAL_CONTROLE_ANDAR_T:
@@ -175,6 +183,7 @@ void task_controle_elevador(void const *arg) {
               (aux == list_menor_subida(requisicoes)) ) {
                 comunicacao_envia_comando_movimento(0);
                 osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 500); //Espera 500ms
+                osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
                 curr_state = S_DESCENDO_PORTAS_ABERTAS;
                 comunicacao_envia_comando_portas(1);
                 andar = aux;
@@ -192,6 +201,7 @@ void task_controle_elevador(void const *arg) {
       
     case S_DESCENDO_PORTAS_ABERTAS:
       osSignalWait(SIGNAL_CONTROLE_TIME_DELAY, 5000); //Espera 5 segundos
+      osSignalClear(osThreadGetId(), SIGNAL_CONTROLE_TIME_DELAY);
       osSemaphoreWait(requests_semaphore, osWaitForever);
       destino = list_get_requisicao(requisicoes, 0);
       osSemaphoreRelease(requests_semaphore);
