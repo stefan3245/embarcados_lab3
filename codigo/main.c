@@ -60,6 +60,8 @@ int main()
     }
     */
     
+    //while(1);
+    
     //Aqui não tem problema dar return, pois as outras threads vão continuar rodando mesmo que a Main finalize (fato comprovado na prática).
     return 0;
 }

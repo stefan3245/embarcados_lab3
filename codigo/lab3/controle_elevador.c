@@ -228,6 +228,7 @@ void task_controle_elevador(void const *arg) {
     default:
       //TODO: tratar erro
       break;
-    } 
+    }
+    //osThreadYield();
   }
 }

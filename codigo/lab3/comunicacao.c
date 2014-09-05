@@ -18,7 +18,7 @@ void task_comunicacao(void const *arg){
     //
     //Lê um caractere em espera na UART (caso haja)
     //
-    if(UART_read(&c[0]) > 0){
+    if(UART_read(&c[0]) > 0) {
       if(is_number(c[0])){
         //Lê tudo até chegar no LF
         //(Cada comando é terminado por CR LF)
@@ -59,6 +59,7 @@ void task_comunicacao(void const *arg){
           osSignalSet(tid_Controle, temp_signal);
           
           if(DEBUG) printf("[Comunicacao] Chegou no andar %d.\n", andar);
+          //if(DEBUG) printf("[Comunicacao] Chegou no andar %s.\n", c);
         }
       } else if(c[0] == 'A'){ //Informação de portas abertas
         
@@ -114,7 +115,7 @@ void task_comunicacao(void const *arg){
       }
       //Cede a execução para outras Threads
       //TODO: verificar se essa é a melhor maneira de coordenar as threads
-      osThreadYield();
+      //osThreadYield();
     }
     //
     //Envia para a UART a próxima string que esteja na Mail Queue
@@ -131,7 +132,7 @@ void task_comunicacao(void const *arg){
     }
     //Cede a execução para outras Threads
     //TODO: verificar se essa é a melhor maneira de coordenar as threads
-    osThreadYield();
+    //osThreadYield();
   }
 }
 
